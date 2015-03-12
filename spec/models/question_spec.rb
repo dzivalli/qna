@@ -8,7 +8,7 @@ RSpec.describe Question, type: :model do
   end
 
   context 'associations' do
-    it { is_expected.to have_many :answers}
+    it { is_expected.to have_many(:answers).dependent(:destroy) }
   end
 
 end
