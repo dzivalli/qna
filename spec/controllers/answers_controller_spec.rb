@@ -6,7 +6,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #new' do
     before do
-      get :new, question_id: question.id
+      get :new, question_id: question
     end
 
     it 'should return new answer' do
@@ -20,12 +20,12 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid parameters' do
       it 'should create new answer' do
-        expect { post :create, question_id: question.id, answer: attributes_for(:answer) }
-            .to change(Answer, :count).by(1)
+        expect { post :create, question_id: question, answer: attributes_for(:answer) }
+            .to change(question.answers, :count).by(1)
       end
 
       it 'should redirect to question page' do
-        post :create, question_id: question.id, answer: attributes_for(:answer)
+        post :create, question_id: question, answer: attributes_for(:answer)
 
         expect(response).to redirect_to question_path(question)
       end
@@ -33,11 +33,11 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid parameters' do
       it 'should not create new answer' do
-        expect { post :create, question_id: question.id, answer: {body: nil} }
+        expect { post :create, question_id: question, answer: {body: nil} }
             .to_not change(Answer, :count)
       end
       it 'should re-render new template' do
-        post :create, question_id: question.id, answer: {body: nil}
+        post :create, question_id: question, answer: {body: nil}
 
         expect(response).to render_template :new
       end
@@ -46,7 +46,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #edit' do
     before do
-      get :edit, question_id: question.id, id: answer.id
+      get :edit, question_id: question, id: answer.id
     end
 
     it 'should return answer by id' do
@@ -60,7 +60,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #update' do
     context 'with valid parameters' do
       before do
-        post :update, question_id: question.id, id: answer.id, answer: {body: 'aaa'}
+        post :update, question_id: question, id: answer.id, answer: {body: 'aaa'}
       end
 
       it 'should update answer with given params' do
@@ -74,11 +74,11 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid parameters' do
       it 'should not update answer' do
-        expect { post :update, question_id: question.id, id: answer.id, answer: {body: nil} }
+        expect { post :update, question_id: question, id: answer.id, answer: {body: nil} }
             .to_not change(answer, :body)
       end
       it 'should re-render new template' do
-        post :update, question_id: question.id, id: answer.id, answer: {body: nil}
+        post :update, question_id: question, id: answer.id, answer: {body: nil}
 
         expect(response).to render_template :edit
       end
@@ -88,11 +88,11 @@ RSpec.describe AnswersController, type: :controller do
   describe 'DELETE #destroy' do
     it 'should delete answer by id' do
       answer
-      expect { delete :destroy, question_id: question.id, id: answer.id }
+      expect { delete :destroy, question_id: question, id: answer.id }
           .to change(Answer, :count).by(-1)
     end
     it 'should redirect to question page' do
-      delete :destroy, question_id: question.id, id: answer.id
+      delete :destroy, question_id: question, id: answer.id
 
       expect(response).to redirect_to question
     end

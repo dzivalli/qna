@@ -27,9 +27,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if @answer.destroy
-      redirect_to @question
-    end
+    redirect_to @question if @answer.destroy
   end
 
 
