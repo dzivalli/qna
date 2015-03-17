@@ -13,7 +13,7 @@ feature 'Create question', type: :feature do
 
   end
 
-  scenario 'User create question with invalid date' do
+  scenario 'User create question with invalid data' do
     visit new_question_path
     click_on 'Submit'
 

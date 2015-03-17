@@ -2,6 +2,12 @@
 %hr
 %p= @question.body
 
+%h4 Answers:
+%ul.list-group
+  - @question.answers.each do |answer|
+    = render partial: 'answers/answer', locals: {answer: answer}
+
+Your answer:
 = render 'answers/form'
 
 

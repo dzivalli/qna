@@ -1,11 +1,13 @@
 class QuestionsController < ApplicationController
-  before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :find_question, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
+    @question = Question.includes(:answers).find params[:id]
+    @answer = Answer.new
   end
 
   def new
