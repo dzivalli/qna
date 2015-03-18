@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 feature 'List question with all answers' do
-  let(:question) { create(:question) }
-  let(:answers) { create_list(:answer, 5)}
+  given(:question) { create(:question) }
+  given(:answers) { create_list(:answer, 5)}
 
   scenario 'list question with answers' do
     question.answers << answers

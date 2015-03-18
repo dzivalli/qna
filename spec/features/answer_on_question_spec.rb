@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 feature 'User can answer on question' do
-  let(:question) { create(:question) }
+  given(:question) { create(:question) }
+  given(:user) { create(:user) }
 
   before do
+    log_in user
+
     question
     visit question_path(question)
   end
