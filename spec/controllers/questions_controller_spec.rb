@@ -35,6 +35,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    log_in
+
     before do
       get :new
     end
@@ -49,6 +51,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    log_in
+
     context 'with valid params' do
       it 'should create new questions' do
         expect { post :create, question: attributes_for(:question) }
@@ -77,6 +81,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    log_in
+
     let(:question) { create(:question) }
 
     before do
@@ -93,6 +99,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    log_in
+
     context 'with valid params' do
       let(:question) { create(:question) }
 
@@ -130,17 +138,42 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    log_in
+
     let(:question) { create(:question) }
 
-    it 'should delete question by its id' do
-      question
-      expect { delete :destroy, id: question }.to change(Question, :count).by -1
+    context 'should delete own question' do
+      before do
+        @user.questions << question
+      end
+
+      it 'should delete question by its id' do
+        expect { delete :destroy, id: question }.to change(Question, :count).by -1
+      end
+
+      it 'should redirect to index page' do
+        delete :destroy, id: question
+
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'should redirect to index page' do
-      delete :destroy, id: question
+    context 'should not delete someone question' do
+      let(:user2) { create(:user) }
 
-      expect(response).to redirect_to questions_path
+      before do
+        user2.questions << question
+      end
+
+      it 'should not delete someone question by id' do
+        expect { delete :destroy, id: question }.to_not change(Question, :count)
+      end
+
+      it 'should redirect to back' do
+        delete :destroy, id: question
+
+        expect(response).to redirect_to question_path(question)
+      end
     end
   end
 end

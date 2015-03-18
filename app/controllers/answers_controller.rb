@@ -29,7 +29,12 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    redirect_to @question if @answer.destroy
+    if @answer.user == current_user
+      @answer.destroy
+      redirect_to @question
+    else
+      redirect_to [@question, @answer]
+    end
   end
 
 

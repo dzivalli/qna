@@ -1,12 +1,15 @@
 %h4= @question.title
 %hr
 %p= @question.body
+- if @question.user == current_user
+  = link_to 'Delete', question_path(@question), method: :delete
 
 %h4 Answers:
 %ul.list-group
   - @question.answers.each do |answer|
     = render partial: 'answers/answer', locals: {answer: answer}
 
+%br
 Your answer:
 = render 'answers/form'
 

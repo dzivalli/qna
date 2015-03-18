@@ -5,6 +5,8 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer) }
 
   describe 'GET #new' do
+    log_in
+
     before do
       get :new, question_id: question
     end
@@ -18,6 +20,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    log_in
+
     context 'with valid parameters' do
       it 'should create new answer' do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }
@@ -45,6 +49,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
+    log_in
+
     before do
       get :edit, question_id: question, id: answer.id
     end
@@ -58,6 +64,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #update' do
+    log_in
+
     context 'with valid parameters' do
       before do
         post :update, question_id: question, id: answer.id, answer: {body: 'aaa'}
@@ -86,15 +94,35 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    it 'should delete answer by id' do
-      answer
-      expect { delete :destroy, question_id: question, id: answer.id }
-          .to change(Answer, :count).by(-1)
-    end
-    it 'should redirect to question page' do
-      delete :destroy, question_id: question, id: answer.id
+    log_in
 
-      expect(response).to redirect_to question
+    let(:user2) { create(:user) }
+
+    context 'delete own answer' do
+      before do
+        question.answers << answer
+        @user.answers << answer
+      end
+
+      it 'should delete answer by id' do
+        expect { delete :destroy, question_id: question, id: answer.id }
+            .to change(question.answers, :count).by(-1)
+      end
+      it 'should redirect to question page' do
+        delete :destroy, question_id: question, id: answer.id
+
+        expect(response).to redirect_to question
+      end
+    end
+
+    context 'delete someone answer' do
+      it 'should not delete answer by id' do
+        question.answers << answer
+        user2.answers << answer
+
+        expect { delete :destroy, question_id: question, id: answer.id }
+            .to_not change(question.answers, :count)
+      end
     end
   end
 
