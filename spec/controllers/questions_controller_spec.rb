@@ -9,11 +9,11 @@ RSpec.describe QuestionsController, type: :controller do
       get :index
     end
 
-    it 'should return all questions' do
+    it 'returns all questions' do
       expect(assigns(:questions)).to match_array questions
     end
 
-    it 'should render index view' do
+    it 'renders index view' do
       expect(response).to render_template :index
     end
   end
@@ -25,11 +25,11 @@ RSpec.describe QuestionsController, type: :controller do
       get :show, id: question
     end
 
-    it 'should return question by its id' do
+    it 'returns question by its id' do
       expect(assigns(:question)).to eq question
     end
 
-    it 'should render show view' do
+    it 'renders show view' do
       expect(response).to render_template :show
     end
   end
@@ -41,11 +41,11 @@ RSpec.describe QuestionsController, type: :controller do
       get :new
     end
 
-    it 'should return a new question' do
+    it 'returns a new question' do
       expect(assigns(:question)).to be_a_new Question
     end
 
-    it 'should render new template' do
+    it 'renders a new template' do
       expect(response).to render_template :new
     end
   end
@@ -53,26 +53,32 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     log_in
 
-    context 'with valid params' do
-      it 'should create new questions' do
+    context 'when valid params' do
+      it 'creates a new question' do
         expect { post :create, question: attributes_for(:question) }
             .to change(Question, :count).by 1
       end
 
-      it 'should redirect to the new question path' do
+      it 'belongs to user who created it' do
+        post :create, question: {title: 'www', body: 'eee'}
+
+        expect(Question.find_by_title('www').user).to eq @user
+      end
+
+      it 'redirects to the new question path' do
         post :create, question: attributes_for(:question)
 
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
-    context 'with invalid params' do
-      it 'should not create question' do
+    context 'when invalid params' do
+      it 'does not create question' do
         expect { post :create, question: { body:nil, title: nil} }
             .to_not change(Question, :count)
       end
 
-      it 'should re-render new template' do
+      it 're-renders a new template' do
         post :create, question: { body:nil, title: nil}
 
         expect(response).to render_template :new
@@ -89,11 +95,11 @@ RSpec.describe QuestionsController, type: :controller do
       get :edit, id: question
     end
 
-    it 'should return question by id' do
+    it 'returns question by id' do
       expect(assigns(:question)).to eq question
     end
 
-    it 'should render edit view' do
+    it 'renders edit view' do
       expect(response).to render_template :edit
     end
   end
@@ -101,37 +107,37 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     log_in
 
-    context 'with valid params' do
+    context 'when valid params' do
       let(:question) { create(:question) }
 
       before do
         patch :update, id: question, question: {body: 'aaa', title: 'bbb'}
       end
 
-      it 'should update the question by id' do
+      it 'updates the question by id' do
         expect(assigns(:question).body).to eq 'aaa'
         expect(assigns(:question).title).to eq 'bbb'
       end
 
-      it 'should redirect to question path' do
+      it 'redirects to question path' do
         expect(response).to redirect_to question_path(question)
       end
     end
 
-    context 'with invalid params' do
+    context 'when invalid params' do
       let(:question) { create(:question, body: 'aaa', title: 'bbb')}
 
       before do
         patch :update, id: question, question: {body: 'www', title: nil}
       end
 
-      it 'should do not update question' do
+      it 'does not update question' do
         question.reload
         expect(question.body).to_not eq 'www'
         expect(question.title).to eq 'bbb'
       end
 
-      it 'should re-render edit view' do
+      it 're-renders edit view' do
         expect(response).to render_template :edit
       end
     end
@@ -142,34 +148,34 @@ RSpec.describe QuestionsController, type: :controller do
 
     let(:question) { create(:question) }
 
-    context 'should delete own question' do
+    context 'when delete own question' do
       before do
         @user.questions << question
       end
 
-      it 'should delete question by its id' do
+      it 'deletes question by its id' do
         expect { delete :destroy, id: question }.to change(Question, :count).by -1
       end
 
-      it 'should redirect to index page' do
+      it 'redirects to index page' do
         delete :destroy, id: question
 
         expect(response).to redirect_to questions_path
       end
     end
 
-    context 'should not delete someone question' do
+    context 'when delete someone question' do
       let(:user2) { create(:user) }
 
       before do
         user2.questions << question
       end
 
-      it 'should not delete someone question by id' do
+      it 'does not delete question by id' do
         expect { delete :destroy, id: question }.to_not change(Question, :count)
       end
 
-      it 'should redirect to back' do
+      it 'redirects to back' do
         delete :destroy, id: question
 
         expect(response).to redirect_to question_path(question)
