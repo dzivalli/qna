@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
+  let(:answer) { create(:answer, question: question) }
 
   describe 'GET #new' do
     log_in
@@ -52,7 +52,7 @@ RSpec.describe AnswersController, type: :controller do
     log_in
 
     before do
-      get :edit, question_id: question, id: answer.id
+      get :edit, question_id: question, id: answer
     end
 
     it 'should return answer by id' do
@@ -68,7 +68,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid parameters' do
       before do
-        post :update, question_id: question, id: answer.id, answer: {body: 'aaa'}
+        post :update, question_id: question, id: answer, answer: {body: 'aaa'}
       end
 
       it 'should update answer with given params' do
@@ -82,11 +82,11 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid parameters' do
       it 'should not update answer' do
-        expect { post :update, question_id: question, id: answer.id, answer: {body: nil} }
+        expect { post :update, question_id: question, id: answer, answer: {body: nil} }
             .to_not change(answer, :body)
       end
       it 'should re-render new template' do
-        post :update, question_id: question, id: answer.id, answer: {body: nil}
+        post :update, question_id: question, id: answer, answer: {body: nil}
 
         expect(response).to render_template :edit
       end
@@ -96,20 +96,19 @@ RSpec.describe AnswersController, type: :controller do
   describe 'DELETE #destroy' do
     log_in
 
-    let(:user2) { create(:user) }
+    let(:user2) { create(:user, answers: answer) }
 
     context 'delete own answer' do
       before do
-        question.answers << answer
         @user.answers << answer
       end
 
       it 'should delete answer by id' do
-        expect { delete :destroy, question_id: question, id: answer.id }
+        expect { delete :destroy, question_id: question, id: answer }
             .to change(question.answers, :count).by(-1)
       end
       it 'should redirect to question page' do
-        delete :destroy, question_id: question, id: answer.id
+        delete :destroy, question_id: question, id: answer
 
         expect(response).to redirect_to question
       end
@@ -117,10 +116,8 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'delete someone answer' do
       it 'should not delete answer by id' do
-        question.answers << answer
-        user2.answers << answer
-
-        expect { delete :destroy, question_id: question, id: answer.id }
+        answer
+        expect { delete :destroy, question_id: question, id: answer }
             .to_not change(question.answers, :count)
       end
     end

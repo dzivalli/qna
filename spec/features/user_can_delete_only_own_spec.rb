@@ -1,9 +1,8 @@
 require 'rails_helper'
 
-feature 'Authenticated user can delete only own questions and answers' do
+feature 'Deleting only own questions and answers' do
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
-
 
   given(:question) { create(:question) }
   given(:answer) { create(:answer, question: question) }
@@ -15,7 +14,10 @@ feature 'Authenticated user can delete only own questions and answers' do
 
     visit question_path(question)
 
-    expect { click_on 'Delete' }.to change(Question, :count).by -1
+    click_on 'Delete'
+
+    expect(page).to_not have_content question.title
+    expect(page).to_not have_content question.body
     expect(current_path).to eq questions_path
   end
 
@@ -37,7 +39,9 @@ feature 'Authenticated user can delete only own questions and answers' do
 
     visit question_path(question)
 
-    expect { click_on 'Delete answer' }.to change(question.answers, :count).by -1
+    click_on 'Delete answer'
+
+    expect(page).to_not have_content answer.body
   end
 
   scenario 'Delete someones answer' do

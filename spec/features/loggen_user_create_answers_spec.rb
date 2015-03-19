@@ -1,16 +1,15 @@
 require 'rails_helper'
 
-feature 'User can answer on question' do
-  given!(:question) { create(:question) }
+feature 'Create answer' do
   given(:user) { create(:user) }
+  given!(:question) { create(:question) }
 
-  before do
+
+  scenario 'Logged user create answer' do
     log_in user
 
     visit question_path(question)
-  end
 
-  scenario 'answer with valid data' do
     fill_in 'answer_body', with: 'www'
     click_on 'Submit'
 
@@ -18,9 +17,12 @@ feature 'User can answer on question' do
     expect(page).to have_content 'www'
   end
 
-  scenario 'answer with invalid data' do
+  scenario 'Unauthenticated user create answer' do
+    visit question_path(question)
+
+    fill_in 'answer_body', with: 'www'
     click_on 'Submit'
 
-    expect(page).to have_content 'Please, fill in body area'
+    expect_sign_in_page
   end
 end

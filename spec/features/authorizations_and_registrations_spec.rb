@@ -41,6 +41,5 @@ feature 'User authorization and registration' do
     click_on 'Sign up'
 
     expect(page).to have_content 'Welcome! You have signed up successfully.'
-    expect(User.find_by_email(email)).to_not be_nil
   end
 end

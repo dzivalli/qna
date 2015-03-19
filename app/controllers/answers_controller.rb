@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: :show
   before_action :find_question
   before_action :find_answer, only: [:edit, :update, :destroy]
-  before_action :authenticate_user!, except: :show
 
   def new
     @answer = Answer.new

@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 feature 'List all questions' do
-  let(:questions) { create_list(:question, 5) }
+  given!(:questions) { create_list(:question, 5) }
 
   scenario 'user should see all questions' do
-    questions
     visit questions_path
 
-    expect(page).to have_selector '.list-group-item', count: questions.count
+    questions.each do |question|
+      expect(page).to have_content question.title
+      expect(page).to have_content question.body
+    end
   end
 end
