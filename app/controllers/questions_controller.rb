@@ -1,11 +1,14 @@
 class QuestionsController < ApplicationController
-  before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :find_question, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
+    @question = Question.includes(:answers).find params[:id]
+    @answer = Answer.new
   end
 
   def new
@@ -13,10 +16,11 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new question_params
+    @question = Question.new question_params.merge(user: current_user)
     if @question.save
-      redirect_to @question
+      redirect_to @question, notice: 'Question was created'
     else
+      flash[:notice] = 'Please, check input data'
       render 'new'
     end
   end
@@ -33,7 +37,13 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    redirect_to questions_path if @question.destroy
+    if @question.user == current_user
+      @question.destroy
+      redirect_to questions_path
+    else
+      redirect_to @question
+    end
+
   end
 
   private

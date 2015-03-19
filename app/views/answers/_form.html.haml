@@ -1,0 +1,5 @@
+= form_for [@question, @answer] do |f|
+  .form-group
+    = f.label 'Answer'
+    = f.text_area :body, class: 'form-control'
+  = f.submit 'Submit'

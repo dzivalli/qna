@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: :show
   before_action :find_question
   before_action :find_answer, only: [:edit, :update, :destroy]
 
@@ -7,10 +8,11 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new answer_params.merge(question: @question)
+    @answer = Answer.new answer_params.merge(question: @question, user: current_user)
     if @answer.save
-      redirect_to @question
+      redirect_to @question, notice: 'Answer was added'
     else
+      flash[:notice] = 'Please, fill in body area'
       render 'new'
     end
   end
@@ -27,7 +29,12 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    redirect_to @question if @answer.destroy
+    if @answer.user == current_user
+      @answer.destroy
+      redirect_to @question
+    else
+      redirect_to [@question, @answer]
+    end
   end
 
 
