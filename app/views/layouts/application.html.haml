@@ -11,6 +11,5 @@
       .m-b
         = render 'common/topbar'
       = yield
+      = render 'common/flash'
 
-      - flash.each do |name, msg|
-        = content_tag :div, msg, class: name

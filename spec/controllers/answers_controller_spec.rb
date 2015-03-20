@@ -24,33 +24,33 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when valid parameters' do
       it 'creates a new answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }
             .to change(question.answers, :count).by(1)
       end
 
       it 'belongs to user who created it' do
-        post :create, question_id: question, answer: {body: 'www'}
+        post :create, question_id: question, answer: {body: 'www'}, format: :js
 
         expect(Answer.find_by_body('www').user).to eq @user
       end
 
-      it 'redirects to question page' do
-        post :create, question_id: question, answer: attributes_for(:answer)
+      it 'renders create template' do
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
 
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template 'create'
       end
     end
 
     context 'when invalid parameters' do
       it 'does not create a new answer' do
-        expect { post :create, question_id: question, answer: {body: nil} }
+        expect { post :create, question_id: question, answer: {body: nil}, format: :js }
             .to_not change(Answer, :count)
       end
 
-      it 're-renders new template' do
-        post :create, question_id: question, answer: {body: nil}
+      it 're-renders create template' do
+        post :create, question_id: question, answer: {body: nil}, format: :js
 
-        expect(response).to render_template :new
+        expect(response).to render_template :create
       end
     end
   end
