@@ -9,12 +9,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.new answer_params.merge(question: @question, user: current_user)
-    if @answer.save
-      redirect_to @question, notice: 'Answer was added'
-    else
-      flash[:notice] = 'Please, fill in body area'
-      render 'new'
-    end
+    flash[:notice] = @answer.save ? 'Answer was added' : 'Please, fill in body area'
   end
 
   def edit

@@ -1,4 +1,4 @@
-= form_for [@question, @answer] do |f|
+= form_for [@question, @answer], remote: true do |f|
   .form-group
     = f.label 'Answer'
     = f.text_area :body, class: 'form-control'

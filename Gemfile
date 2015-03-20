@@ -35,6 +35,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'haml-rails'
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'devise'
+gem 'quiet_assets'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -48,10 +49,12 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'selenium-webdriver'
 end
 
 group :test do
   gem 'shoulda-matchers', require: false
   gem 'capybara'
   gem 'launchy'
+  gem 'database_cleaner'
 end
