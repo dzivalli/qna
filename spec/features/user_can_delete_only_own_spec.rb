@@ -14,7 +14,9 @@ feature 'Deleting only own questions and answers' do
 
     visit question_path(question)
 
-    click_on 'Delete'
+    within '.question' do
+      page.find('.delete').click
+    end
 
     expect(page).to_not have_content question.title
     expect(page).to_not have_content question.body

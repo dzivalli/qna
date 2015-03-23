@@ -111,7 +111,7 @@ RSpec.describe QuestionsController, type: :controller do
       let(:question) { create(:question) }
 
       before do
-        patch :update, id: question, question: {body: 'aaa', title: 'bbb'}
+        patch :update, id: question, question: {body: 'aaa', title: 'bbb'}, format: :js
       end
 
       it 'updates the question by id' do
@@ -120,7 +120,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'redirects to question path' do
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template :update
       end
     end
 
@@ -128,7 +128,7 @@ RSpec.describe QuestionsController, type: :controller do
       let(:question) { create(:question, body: 'aaa', title: 'bbb')}
 
       before do
-        patch :update, id: question, question: {body: 'www', title: nil}
+        patch :update, id: question, question: {body: 'www', title: nil}, format: :js
       end
 
       it 'does not update question' do
@@ -138,7 +138,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 're-renders edit view' do
-        expect(response).to render_template :edit
+        expect(response).to render_template :update
       end
     end
   end
