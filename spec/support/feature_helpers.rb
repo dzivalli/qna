@@ -12,4 +12,8 @@ module FeatureHelpers
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
     expect(current_path).to eq new_user_session_path
   end
+
+  def data_id(answer)
+    "[data-id='#{answer.id}']"
+  end
 end

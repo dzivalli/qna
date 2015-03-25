@@ -14,7 +14,7 @@ feature 'Edit' do
     end
 
     scenario 'with valid params', js: true do
-      within "[data-id='#{answer.id}']" do
+      within data_id(answer) do
         page.find('.edit').click
 
         fill_in 'answer_body', with: 'www'
@@ -28,7 +28,7 @@ feature 'Edit' do
     end
 
     scenario 'Own answer with wrong params', js: true do
-      within "[data-id='#{answer.id}']" do
+      within data_id(answer) do
         page.find('.edit').click
 
         fill_in 'answer_body', with: ''
@@ -45,7 +45,7 @@ feature 'Edit' do
   scenario 'Someones answer', js: true do
     visit question_path(question)
 
-    within "[data-id='#{answer.id}']" do
+    within data_id(answer) do
       expect(page).to_not have_selector('.edit')
     end
   end

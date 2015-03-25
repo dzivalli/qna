@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   resources :questions do
-    resources :answers, except: :index
+    resources :answers, except: :index do
+      get 'choice', on: :member
+    end
   end
 end

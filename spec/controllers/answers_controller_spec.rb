@@ -140,4 +140,35 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'GET #choice' do
+    log_in
+
+    context 'when user questions owner' do
+      before do
+        question.answers << answer
+        @user.questions << question
+
+        #  got: {"marked_for_same_origin_verification"=>false
+        post :choice, question_id: question, id: answer, format: :js
+      end
+
+      it 'updates answer on question' do
+        # because of got: {"marked_for_same_origin_verification"=>false
+        expect(assigns(question.answer).to_s).to match(answer.body)
+      end
+
+      it { is_expected.to render_template :choice }
+    end
+
+    context 'when user not owner' do
+      before { post :choice, question_id: question, id: answer, format: :js }
+
+      it 'does not update answer on question' do
+        expect(assigns(question.answer)).to_not eq answer
+      end
+
+      it { is_expected.to render_template :choice }
+    end
+  end
+
 end

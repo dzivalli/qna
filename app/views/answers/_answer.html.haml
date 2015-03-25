@@ -1,18 +1,26 @@
 %div.answer{data: {id: answer.id}}
   .answer-errors
-  %li.list-group-item
-    .answer-body
-      = answer.body
-    %br
-    - if answer.user == current_user
-      = link_to edit_question_answer_path(@question, answer), class: 'edit m-r' do
-        %i.fa.fa-pencil
-      = link_to question_answer_path(@question, answer), method: :delete, remote: true, class: 'delete' do
-        %i.fa.fa-trash
+  .row
+    .col-sm-1
+      .sign
+        - if @question.answer == answer
+          %i.fa.fa-check-circle.fa-4x
+    .col-sm-9
+      %li.list-group-item
+        .answer-body
+          = answer.body
+        %br
+        - if answer.user == current_user
+          = link_to edit_question_answer_path(@question, answer), class: 'edit m-r' do
+            %i.fa.fa-pencil
+          = link_to question_answer_path(@question, answer), method: :delete, remote: true, class: 'delete' do
+            %i.fa.fa-trash
+          = link_to choice_question_answer_path(@question, answer), remote: true, class: 'best' do
+            %i.fa.fa-thumbs-o-up
 
-  = form_for [@question, answer], html: {class: 'answer-form', remote: true} do |f|
-    = f.text_area :body, class: 'form-control'
-    = f.submit 'Save', class: 'btn btn-default'
-    = button_tag 'Close', type: 'button', class: 'btn btn-default', id: 'close'
+      = form_for [@question, answer], html: {class: 'answer-form', remote: true} do |f|
+        = f.text_area :body, class: 'form-control'
+        = f.submit 'Save', class: 'btn btn-default'
+        = button_tag 'Close', type: 'button', class: 'btn btn-default', id: 'close'
 
 

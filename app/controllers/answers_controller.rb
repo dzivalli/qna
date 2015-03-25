@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :find_question
-  before_action :find_answer, only: [:edit, :update, :destroy]
+  before_action :find_answer, only: [:edit, :update, :destroy, :choice]
 
   def new
     @answer = Answer.new
@@ -20,7 +20,15 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy if @answer.belongs_to?(current_user)
+    if @answer.belongs_to?(current_user)
+      @question.change_best_if(@answer)
+      @answer.destroy
+    end
+
+  end
+
+  def choice
+    @question.update(answer: @answer) if @answer.belongs_to?(current_user)
   end
 
 
