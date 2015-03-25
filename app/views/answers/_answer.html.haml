@@ -11,7 +11,7 @@
           = answer.body
         %br
         - if answer.user == current_user
-          = link_to edit_question_answer_path(@question, answer), class: 'edit m-r' do
+          = link_to edit_question_answer_path(@question, answer), class: 'edit' do
             %i.fa.fa-pencil
           = link_to question_answer_path(@question, answer), method: :delete, remote: true, class: 'delete' do
             %i.fa.fa-trash

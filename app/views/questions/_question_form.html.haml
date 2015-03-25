@@ -4,7 +4,7 @@
       = @question.title
       .pull-right
         - if @question.user == current_user
-          = link_to edit_question_path(@question), class: 'edit m-r' do
+          = link_to edit_question_path(@question), class: 'edit' do
             %i.fa.fa-pencil
           = link_to question_path(@question), method: :delete, class: 'delete' do
             %i.fa.fa-trash
