@@ -10,6 +10,7 @@
             %i.fa.fa-trash
   .panel-body
     = @question.body
+    = @question.body
 
 = form_for @question, remote: true, html: { class: 'panel-form' } do |f|
   .panel.panel-default

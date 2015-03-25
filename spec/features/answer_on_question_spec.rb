@@ -14,13 +14,14 @@ feature 'User can answer on question' do
     fill_in 'answer_body', with: 'www'
     click_on 'Submit'
 
-    # expect(page).to have_content 'Answer was added'
     expect(page).to have_content 'www'
   end
 
-  # scenario 'answer with invalid data', js: true do
-  #   click_on 'Submit'
-  #
-  #   expect(page).to have_content 'Please, fill in body area'
-  # end
+  scenario 'answer with invalid data', js: true do
+    click_on 'Submit'
+
+    within 'form#new_answer' do
+      expect(page).to have_content "Body can't be blank"
+    end
+  end
 end

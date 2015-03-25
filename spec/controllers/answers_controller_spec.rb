@@ -14,9 +14,8 @@ RSpec.describe AnswersController, type: :controller do
     it 'returns a new answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
-    it 'renders a new template' do
-      expect(response).to render_template :new
-    end
+
+    it { is_expected.to render_template :new }
   end
 
   describe 'POST #create' do
@@ -66,17 +65,18 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:answer)).to eq answer
     end
 
-    it 'renders edit template' do
-      expect(response).to render_template :edit
-    end
+    it { is_expected.to render_template :edit }
   end
 
-  describe 'POST #update' do
+  describe 'PATCH #update' do
+    let(:user2) { create(:user) }
     log_in
+
+    before { answer.update user: @user }
 
     context 'when valid parameters' do
       before do
-        post :update, question_id: question, id: answer, answer: {body: 'aaa'}
+        patch :update, question_id: question, id: answer, answer: {body: 'aaa'}, format: :js
       end
 
       it 'updates answer with given params' do
@@ -84,21 +84,33 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq 'aaa'
       end
 
-      it 'redirects to question page' do
-        expect(response).to redirect_to question
-      end
+      it { is_expected.to render_template :update }
     end
 
     context 'when invalid parameters' do
       it 'does not update answer' do
-        expect { post :update, question_id: question, id: answer, answer: {body: nil} }
-            .to_not change(answer, :body)
+        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :js
+
+        answer.reload
+        expect(answer.body).to be_truthy
+        # expect { post :update, question_id: question, id: answer, answer: {body: nil}, format: :js }
+        #     .to_not change(answer, :body)
       end
 
-      it 're-renders new template' do
-        post :update, question_id: question, id: answer, answer: {body: nil}
+      it 'renders update template' do
+        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :js
 
-        expect(response).to render_template :edit
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'when answer belongs to someone else' do
+      it 'does not edit answer' do
+        answer.update user: user2
+        patch :update, question_id: question, id: answer, answer: { body: 'www' }, format: :js
+
+        answer.reload
+        expect(answer.body).to_not eq 'www'
       end
     end
   end
@@ -114,21 +126,15 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'deletes answer by id' do
-        expect { delete :destroy, question_id: question, id: answer }
+        expect { delete :destroy, question_id: question, id: answer, format: :js }
             .to change(question.answers, :count).by(-1)
-      end
-
-      it 'redirects to question page' do
-        delete :destroy, question_id: question, id: answer
-
-        expect(response).to redirect_to question
       end
     end
 
     context 'when delete someone answer' do
       it 'does not delete answer by id' do
         answer
-        expect { delete :destroy, question_id: question, id: answer }
+        expect { delete :destroy, question_id: question, id: answer, format: :js }
             .to_not change(Answer, :count)
       end
     end

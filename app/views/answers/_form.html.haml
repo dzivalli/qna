@@ -1,5 +1,6 @@
 = form_for [@question, @answer], remote: true do |f|
   .form-group
     = f.label 'Answer'
+    .answer-errors
     = f.text_area :body, class: 'form-control'
   = f.submit 'Submit', class: 'btn btn-default'

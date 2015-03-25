@@ -1,7 +1,18 @@
-%li.list-group-item
-  .answer-body
-    = answer.body
-  %br
-  - if answer.user == current_user
-    = link_to question_answer_path(@question, answer), method: :delete do
-      %i.fa.fa-trash
+%div.answer{data: {id: answer.id}}
+  .answer-errors
+  %li.list-group-item
+    .answer-body
+      = answer.body
+    %br
+    - if answer.user == current_user
+      = link_to edit_question_answer_path(@question, answer), class: 'edit m-r' do
+        %i.fa.fa-pencil
+      = link_to question_answer_path(@question, answer), method: :delete, remote: true, class: 'delete' do
+        %i.fa.fa-trash
+
+  = form_for [@question, answer], html: {class: 'answer-form', remote: true} do |f|
+    = f.text_area :body, class: 'form-control'
+    = f.submit 'Save', class: 'btn btn-default'
+    = button_tag 'Close', type: 'button', class: 'btn btn-default', id: 'close'
+
+

@@ -1,2 +1,10 @@
-$('ul.list-group').append("<%= j render @answer %>")
-$('#answer_body').val('')
+error_field = $('form#new_answer').find('.answer-errors');
+error_field.html('');
+<% if @answer.errors.any? %>
+  <% @answer.errors.full_messages.each do |msg| %>
+    error_field.html("<p><%= msg %></p>");
+  <% end  %>
+<% else %>
+  $('ul.list-group').append("<%= j render @answer %>");
+  $('form#new_answer #answer_body').val('');
+<% end %>

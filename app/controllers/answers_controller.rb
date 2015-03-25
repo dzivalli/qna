@@ -9,27 +9,18 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.new answer_params.merge(question: @question, user: current_user)
-    flash[:notice] = @answer.save ? 'Answer was added' : 'Please, fill in body area'
+    @answer.save
   end
 
   def edit
   end
 
   def update
-    if @answer.update answer_params
-      redirect_to @question
-    else
-      render 'edit'
-    end
+    @answer.update answer_params if @answer.belongs_to?(current_user)
   end
 
   def destroy
-    if @answer.user == current_user
-      @answer.destroy
-      redirect_to @question
-    else
-      redirect_to [@question, @answer]
-    end
+    @answer.destroy if @answer.belongs_to?(current_user)
   end
 
 
