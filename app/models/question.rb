@@ -6,7 +6,7 @@ class Question < ActiveRecord::Base
   validates :title, presence: true
   validates :body, presence: true
 
-  def change_best_if(current_answer)
+  def change_best(current_answer)
     update(answer: nil) if current_answer == answer
   end
 end

@@ -21,7 +21,7 @@ class AnswersController < ApplicationController
 
   def destroy
     if @answer.belongs_to?(current_user)
-      @question.change_best_if(@answer)
+      @question.change_best(@answer)
       @answer.destroy
     end
 
