@@ -154,7 +154,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'updates answer on question' do
         # because of got: {"marked_for_same_origin_verification"=>false
-        expect(assigns(question.answer).to_s).to match(answer.body)
+        expect(assigns(question.best_answer).to_s).to match(answer.body)
       end
 
       it { is_expected.to render_template :choice }
@@ -164,7 +164,7 @@ RSpec.describe AnswersController, type: :controller do
       before { post :choice, question_id: question, id: answer, format: :js }
 
       it 'does not update answer on question' do
-        expect(assigns(question.answer)).to_not eq answer
+        expect(assigns(question.best_answer)).to_not eq answer
       end
 
       it { is_expected.to render_template :choice }

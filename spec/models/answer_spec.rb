@@ -8,6 +8,7 @@ RSpec.describe Answer, type: :model do
 
   context 'associations' do
     it { is_expected.to belong_to :question}
+    it { is_expected.to have_one :question_as_best}
   end
   
 end

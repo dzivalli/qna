@@ -28,7 +28,7 @@ class AnswersController < ApplicationController
   end
 
   def choice
-    @question.update(answer: @answer) if @answer.belongs_to?(current_user)
+    @question.update(best_answer: @answer) if @answer.belongs_to?(current_user)
   end
 
 

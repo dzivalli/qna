@@ -3,14 +3,14 @@
   .row
     .col-sm-1
       .sign
-        - if @question.answer == answer
+        - if @question.best_answer == answer
           %i.fa.fa-check-circle.fa-4x
     .col-sm-9
       %li.list-group-item
         .answer-body
           = answer.body
         %br
-        - if current_user && (answer.user_id == current_user.id)
+        - if current_user && answer.user_id == current_user.id
           = link_to edit_question_answer_path(@question, answer), class: 'edit' do
             %i.fa.fa-pencil
           = link_to question_answer_path(@question, answer), method: :delete, remote: true, class: 'delete' do

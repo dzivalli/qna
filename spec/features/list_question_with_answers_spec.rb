@@ -5,7 +5,7 @@ feature 'List question with all answers' do
   given!(:answers) { create_list(:answer, 5, question: question)}
 
   before do
-    question.update(answer: answers.last)
+    question.update(best_answer: answers.last)
     visit question_path(question)
   end
 
