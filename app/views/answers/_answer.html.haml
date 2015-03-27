@@ -3,7 +3,7 @@
   .row
     .col-sm-1
       .sign
-        - if @question.best_answer == answer
+        - if answer.best
           %i.fa.fa-check-circle.fa-4x
     .col-sm-9
       %li.list-group-item

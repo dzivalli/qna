@@ -147,14 +147,15 @@ RSpec.describe AnswersController, type: :controller do
       before do
         question.answers << answer
         @user.questions << question
+        @user.answers << answer
 
-        #  got: {"marked_for_same_origin_verification"=>false
-        post :choice, question_id: question, id: answer, format: :js
+        xhr :get, :choice, question_id: question, id: answer, format: :js
       end
 
-      it 'updates answer on question' do
-        # because of got: {"marked_for_same_origin_verification"=>false
-        expect(assigns(question.best_answer).to_s).to match(answer.body)
+      it 'updates answer best to true' do
+        answer.reload
+
+        expect(answer.best).to be_truthy
       end
 
       it { is_expected.to render_template :choice }
@@ -164,7 +165,7 @@ RSpec.describe AnswersController, type: :controller do
       before { post :choice, question_id: question, id: answer, format: :js }
 
       it 'does not update answer on question' do
-        expect(assigns(question.best_answer)).to_not eq answer
+        expect(answer.best).to be_falsey
       end
 
       it { is_expected.to render_template :choice }

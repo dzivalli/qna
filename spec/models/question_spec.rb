@@ -9,7 +9,6 @@ RSpec.describe Question, type: :model do
 
   context 'associations' do
     it { is_expected.to have_many(:answers).dependent(:destroy) }
-    it { is_expected.to belong_to :best_answer }
   end
 
 end
