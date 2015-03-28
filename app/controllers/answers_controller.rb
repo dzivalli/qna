@@ -16,15 +16,15 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update answer_params if @answer.belongs_to?(current_user)
+    @answer.update answer_params if current_user.owns? @answer
   end
 
   def destroy
-    @answer.destroy if @answer.belongs_to?(current_user)
+    @answer.destroy if current_user.owns? @answer
   end
 
   def choice
-    @answer.best! if @answer.belongs_to?(current_user)
+    @answer.best!
   end
 
 

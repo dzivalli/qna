@@ -29,11 +29,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update question_params
+    @question.update question_params if current_user.owns? @question
   end
 
   def destroy
-    if current_user && @question.user_id == current_user.id
+    if current_user.owns? @question
       @question.destroy
       redirect_to questions_path
     else

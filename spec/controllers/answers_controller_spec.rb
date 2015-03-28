@@ -143,11 +143,10 @@ RSpec.describe AnswersController, type: :controller do
   describe 'GET #choice' do
     log_in
 
-    context 'when user questions owner' do
+    context 'when user is question owner' do
       before do
         question.answers << answer
         @user.questions << question
-        @user.answers << answer
 
         xhr :get, :choice, question_id: question, id: answer, format: :js
       end
@@ -161,7 +160,7 @@ RSpec.describe AnswersController, type: :controller do
       it { is_expected.to render_template :choice }
     end
 
-    context 'when user not owner' do
+    context 'when user is not owner' do
       before { post :choice, question_id: question, id: answer, format: :js }
 
       it 'does not update answer on question' do
