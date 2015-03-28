@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :show
-  before_action :find_question, except: :choice
+  before_action :find_question
   before_action :find_answer, only: [:edit, :update, :destroy, :choice]
 
   def new
@@ -24,7 +24,7 @@ class AnswersController < ApplicationController
   end
 
   def choice
-    @answer.best!
+    @answer.best! if current_user.owns? @question
   end
 
 

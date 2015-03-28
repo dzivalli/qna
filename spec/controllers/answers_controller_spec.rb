@@ -153,7 +153,6 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'updates answer best to true' do
         answer.reload
-
         expect(answer.best).to be_truthy
       end
 
@@ -161,9 +160,10 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when user is not owner' do
-      before { post :choice, question_id: question, id: answer, format: :js }
+      before { xhr :get, :choice, question_id: question, id: answer, format: :js }
 
       it 'does not update answer on question' do
+        answer.reload
         expect(answer.best).to be_falsey
       end
 
