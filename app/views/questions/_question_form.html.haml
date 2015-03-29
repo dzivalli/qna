@@ -1,0 +1,25 @@
+.panel.panel-default.panel-question
+  .panel-heading
+    .panel-title
+      = @question.title
+      .pull-right
+        - if current_user && current_user.owns?(@question)
+          = link_to edit_question_path(@question), class: 'edit' do
+            %i.fa.fa-pencil
+          = link_to question_path(@question), method: :delete, class: 'delete' do
+            %i.fa.fa-trash
+  .panel-body
+    = @question.body
+    = @question.body
+
+= form_for @question, remote: true, html: { class: 'panel-form' } do |f|
+  .panel.panel-default
+    .panel-heading
+      .panel-title
+        = f.text_field :title, class: 'form-control'
+        .pull-right
+    .panel-body
+      = f.text_area :body, class: 'form-control'
+    .panel-body
+      = f.submit 'Save', class: 'btn btn-default'
+      = button_tag 'Close', type: 'button', class: 'btn btn-default', id: 'close'

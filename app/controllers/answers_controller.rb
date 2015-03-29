@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :find_question
-  before_action :find_answer, only: [:edit, :update, :destroy]
+  before_action :find_answer, only: [:edit, :update, :destroy, :choice]
 
   def new
     @answer = Answer.new
@@ -9,27 +9,22 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.new answer_params.merge(question: @question, user: current_user)
-    flash[:notice] = @answer.save ? 'Answer was added' : 'Please, fill in body area'
+    @answer.save
   end
 
   def edit
   end
 
   def update
-    if @answer.update answer_params
-      redirect_to @question
-    else
-      render 'edit'
-    end
+    @answer.update answer_params if current_user.owns? @answer
   end
 
   def destroy
-    if @answer.user == current_user
-      @answer.destroy
-      redirect_to @question
-    else
-      redirect_to [@question, @answer]
-    end
+    @answer.destroy if current_user.owns? @answer
+  end
+
+  def choice
+    @answer.best! if current_user.owns? @question
   end
 
 

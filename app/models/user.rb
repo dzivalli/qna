@@ -6,4 +6,8 @@ class User < ActiveRecord::Base
 
   has_many :questions
   has_many :answers
+
+  def owns?(obj)
+    obj.respond_to?(:user_id) && obj.user_id == id
+  end
 end

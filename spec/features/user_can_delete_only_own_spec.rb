@@ -14,7 +14,9 @@ feature 'Deleting only own questions and answers' do
 
     visit question_path(question)
 
-    click_on 'Delete'
+    within '.question' do
+      page.find('.delete').click
+    end
 
     expect(page).to_not have_content question.title
     expect(page).to_not have_content question.body
@@ -31,7 +33,7 @@ feature 'Deleting only own questions and answers' do
     expect(page).to_not have_content 'Delete'
   end
 
-  scenario 'Delete own answer' do
+  scenario 'Delete own answer', js: true do
     user.questions << question
     user.answers << answer
 
@@ -39,12 +41,14 @@ feature 'Deleting only own questions and answers' do
 
     visit question_path(question)
 
-    click_on 'Delete answer'
+    within "[data-id='#{answer.id}']" do
+      page.find('.delete').click
+    end
 
-    expect(page).to_not have_content answer.body
+    expect(page).to_not have_selector "[data-id='#{answer.id}']"
   end
 
-  scenario 'Delete someones answer' do
+  scenario 'Delete someones answer', js: true do
     user2.questions << question
     user2.answers << answer
 
@@ -52,6 +56,8 @@ feature 'Deleting only own questions and answers' do
 
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete answer'
+    within "[data-id='#{answer.id}']" do
+      expect(page).to_not have_selector '.delete'
+    end
   end
 end

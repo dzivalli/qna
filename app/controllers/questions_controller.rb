@@ -1,13 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy]
+  before_action :find_question, only: [:edit, :update, :destroy, :show]
 
   def index
     @questions = Question.all
   end
 
   def show
-    @question = Question.includes(:answers).find params[:id]
+    @answers = @question.answers.best_first
     @answer = Answer.new
   end
 
@@ -29,15 +29,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update question_params
-      redirect_to @question
-    else
-      render 'edit'
-    end
+    @question.update question_params if current_user.owns? @question
   end
 
   def destroy
-    if @question.user == current_user
+    if current_user.owns? @question
       @question.destroy
       redirect_to questions_path
     else
