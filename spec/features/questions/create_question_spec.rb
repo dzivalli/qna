@@ -7,8 +7,8 @@ feature 'Create question', type: :feature do
     log_in user
 
     visit new_question_path
-    fill_in 'question_title', with: 'www'
-    fill_in 'question_body', with: 'eee'
+    fill_in 'Title', with: 'www'
+    fill_in 'Text', with: 'eee'
     click_on 'Submit'
 
     expect(page).to have_content 'www'

@@ -1,7 +1,7 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-$ ->
+init = ->
   $('.question').on 'click', '.edit', (e) ->
     e.preventDefault()
     $('.panel-question').hide()
@@ -26,3 +26,5 @@ $ ->
     current_form.prev('li').show()
     $(this).parents('.answer').children('.answer-errors').html('')
 
+$(document).ready init
+$(document). on 'page:load', init

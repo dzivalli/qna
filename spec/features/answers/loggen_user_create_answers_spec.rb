@@ -10,19 +10,16 @@ feature 'Create answer' do
 
     visit question_path(question)
 
-    fill_in 'answer_body', with: 'www'
+    fill_in 'Text', with: 'www'
     click_on 'Submit'
 
-    # expect(page).to have_content 'Answer was added'
     expect(page).to have_content 'www'
   end
 
-  scenario 'Unauthenticated user create answer' do
+
+  scenario 'unauthorized users cant see answer form' do
     visit question_path(question)
 
-    fill_in 'answer_body', with: 'www'
-    click_on 'Submit'
-
-    expect_sign_in_page
+    expect(page).to_not have_selector '#new_answer'
   end
 end

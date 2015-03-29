@@ -11,7 +11,7 @@ feature 'User can answer on question' do
   end
 
   scenario 'answer with valid data', js: true do
-    fill_in 'answer_body', with: 'www'
+    fill_in 'Text', with: 'www'
     click_on 'Submit'
 
     expect(page).to have_content 'www'
