@@ -18,7 +18,7 @@ RSpec.describe Answer, type: :model do
 
     before { best_answer.best! }
 
-    it 'sets best to nil for all answers belongs to the same question' do
+    it 'sets best to nil for all answers belong to the same question' do
       answers.each do |answer|
         answer.reload
         expect(answer.best).to  be_falsey
