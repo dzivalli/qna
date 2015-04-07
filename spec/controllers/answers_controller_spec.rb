@@ -33,6 +33,12 @@ RSpec.describe AnswersController, type: :controller do
         expect(Answer.find_by_body('www').user).to eq @user
       end
 
+      it 'builds new answer' do
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+
+        expect(assigns(:answer_new)).to be_a_new(Answer)
+      end
+
       it 'renders create template' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :js
 
