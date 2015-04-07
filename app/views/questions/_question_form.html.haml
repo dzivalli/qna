@@ -1,4 +1,5 @@
-.panel.panel-default.panel-question
+.errors
+.panel.panel-default.panel-question.body
   .panel-heading
     .panel-title
       = @question.title
@@ -13,28 +14,4 @@
   .panel-body
     - @question.attachments.each do |attachment|
       %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
-
-- if user_signed_in? && current_user.owns?(@question)
-  = form_for @question, remote: true, html: { class: 'panel-form' } do |f|
-    .panel.panel-default
-      .panel-heading
-        .panel-title
-          = f.text_field :title, class: 'form-control'
-          .pull-right
-      .panel-body
-        .form-group
-          = f.text_area :body, class: 'form-control'
-        .form-group.file_fields
-          = f.fields_for :attachments do |a|
-            - if a.object.new_record?
-              = a.file_field :file
-            - else
-              %p{data: {file: "#{a.object.file_identifier}"}}
-                = label_tag a.object.file_identifier
-                = link_to '#', class: 'delete-attachment', data: { destroy: "#{a.object.id}"} do
-                  %i.fa.fa-trash
-              = a.check_box '_destroy', class: 'hide', data: { destroy: "#{a.object.id}"}
-
-      .panel-body
-        = f.submit 'Save', class: 'btn btn-default'
-        = button_tag 'Close', type: 'button', class: 'btn btn-default', id: 'close'
+.form{data: {url: edit_question_path(@question)}}

@@ -9,8 +9,7 @@ class QuestionsController < ApplicationController
   def show
     @question = Question.includes(:attachments).find params[:id]
     @answers = @question.answers.best_first
-    @answer = Answer.new
-    @question.attachments.build
+    @answer = Answer.new_with_attachment
   end
 
   def new
@@ -29,11 +28,13 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    @question.attachments.build
+    render layout: false
   end
 
   def update
     if current_user.owns? @question
-      @question.update! question_params
+      @question.update question_params
       @question.attachments.build
     end
   end

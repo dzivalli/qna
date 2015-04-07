@@ -10,7 +10,8 @@ feature 'Add attachment to question' do
 
     visit question_path(question)
 
-    add_files("#{Rails.root}/spec/rails_helper.rb",
+    add_files('.question',
+              "#{Rails.root}/spec/rails_helper.rb",
               "#{Rails.root}/spec/spec_helper.rb")
   end
 

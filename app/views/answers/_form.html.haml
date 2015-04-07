@@ -1,6 +1,10 @@
-= form_for [@question, @answer], remote: true do |f|
-  .form-group
-    = f.label :body, 'Text'
-    .answer-errors
-    = f.text_area :body, class: 'form-control'
-  = f.submit 'Submit', class: 'btn btn-default'
+.box.answer
+  = form_for [@question, answer], remote: true do |f|
+    .form-group
+      = f.label :body, 'Text'
+      .errors
+      = f.text_area :body, class: 'form-control'
+    .form-group.file_fields
+      = f.fields_for :attachments do |a|
+        = a.file_field :file
+    = f.submit 'Submit', class: 'btn btn-default'

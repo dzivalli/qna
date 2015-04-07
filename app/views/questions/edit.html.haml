@@ -1,0 +1,14 @@
+= form_for @question, remote: true do |f|
+  .panel.panel-default
+    .panel-heading
+      .panel-title
+        = f.text_field :title, class: 'form-control'
+        .pull-right
+    .panel-body
+      .form-group
+        = f.text_area :body, class: 'form-control'
+      .form-group.file_fields
+        = f.fields_for :attachments do |a|
+          = render partial: 'common/attachment', locals: { a: a }
+  = f.submit 'Save', class: 'btn btn-default'
+  = button_tag 'Close', type: 'button', class: 'btn btn-default button-close'

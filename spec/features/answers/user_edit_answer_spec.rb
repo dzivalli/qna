@@ -35,7 +35,7 @@ feature 'Edit' do
 
         click_on 'Save'
 
-        within '.answer-errors' do
+        within '.errors' do
           expect(page).to have_content "Body can't be blank"
         end
       end

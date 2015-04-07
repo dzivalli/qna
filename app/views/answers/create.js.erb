@@ -1,4 +1,4 @@
-error_field = $('form#new_answer').find('.answer-errors');
+error_field = $('form#new_answer').find('.errors');
 error_field.html('');
 <% if @answer.errors.any? %>
   <% @answer.errors.full_messages.each do |msg| %>
@@ -7,4 +7,6 @@ error_field.html('');
 <% else %>
   $('ul.list-group').append("<%= j render @answer %>");
   $('form#new_answer #answer_body').val('');
+  new_answer_html = $("<%= j render partial: 'form', locals: {answer: @answer_new }%>");
+  $('.box.answer').replaceWith(new_answer_html);
 <% end %>

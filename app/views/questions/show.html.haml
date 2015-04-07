@@ -1,5 +1,4 @@
-.question-errors
-.question
+.question.box
   = render 'question_form'
 
 %h4 Answers:
@@ -8,7 +7,7 @@
 
 - if user_signed_in?
   %h4 Your answer:
-  = render 'answers/form'
+  = render partial: 'answers/form', locals: { answer: @answer }
 
 
 

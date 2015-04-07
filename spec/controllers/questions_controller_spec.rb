@@ -92,7 +92,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:question) { create(:question) }
 
     before do
-      get :edit, id: question
+      get :edit, id: question, format: :js
     end
 
     it 'returns question by id' do

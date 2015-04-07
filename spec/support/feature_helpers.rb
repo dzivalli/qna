@@ -17,13 +17,17 @@ module FeatureHelpers
     "[data-id='#{answer.id}']"
   end
 
-  def add_files(*files)
-    page.find('.edit').click
+  def add_files(selector, *files)
+    obj = selector == '.question' ? 'question' : 'answer'
 
-    files.each_with_index do |file, i|
-      attach_file "question[attachments_attributes][#{i}][file]", file
+    within selector do
+      page.find('.edit').click
+
+      files.each_with_index do |file, i|
+        attach_file "#{obj}[attachments_attributes][#{i}][file]", file
+      end
+
+      click_on 'Save'
     end
-
-    click_on 'Save'
   end
 end
