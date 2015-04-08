@@ -9,7 +9,8 @@ class QuestionsController < ApplicationController
   def show
     @question = Question.includes(:attachments).find params[:id]
     @answers = @question.answers.best_first
-    @answer = Answer.new_with_attachment
+    @answer = Answer.new
+    @answer.attachments.build
   end
 
   def new

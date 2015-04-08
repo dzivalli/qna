@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
 
-  it { is_expected.to validate_presence_of :body }
   it { is_expected.to belong_to :question}
   it { is_expected.to have_many(:attachments).dependent(:destroy)}
 
+  it { is_expected.to validate_presence_of :body }
+
+  it { is_expected.to accept_nested_attributes_for(:attachments).allow_destroy(true) }
 
   describe '#best!' do
     let(:question) { create(:question) }
@@ -25,18 +27,5 @@ RSpec.describe Answer, type: :model do
       expect(best_answer.best).to be_truthy
     end
 
-  end
-
-  describe '.new_with_attachment' do
-    let!(:answer) { Answer.new_with_attachment }
-
-    it 'is a new answer' do
-      expect(answer.new_record?).to be_truthy
-    end
-
-    it 'has one new attachment' do
-      expect(answer.attachments[0].new_record?).to be_truthy
-      expect(answer.attachments.length).to eq 1
-    end
   end
 end

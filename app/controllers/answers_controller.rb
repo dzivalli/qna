@@ -9,8 +9,12 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.new answer_params.merge(question: @question, user: current_user)
-    @answer_new = Answer.new_with_attachment if @answer.save
+    if @answer.save
+      @answer_new = Answer.new
+      @answer_new.attachments.build
+    end
   end
+
 
   def edit
     @answer.attachments.build

@@ -24,20 +24,4 @@ feature 'User can answer on question' do
       expect(page).to have_content "Body can't be blank"
     end
   end
-
-  scenario 'answer with attached files', js: true do
-    fill_in 'Text', with: 'www'
-
-    attach_file 'answer[attachments_attributes][0][file]',
-                "#{Rails.root}/spec/rails_helper.rb"
-    attach_file 'answer[attachments_attributes][1][file]',
-                "#{Rails.root}/spec/spec_helper.rb"
-
-    click_on 'Submit'
-
-    within all('.list-group .box').last do
-      expect(page).to have_link 'rails_helper.rb'
-      expect(page).to have_link 'spec_helper.rb'
-    end
-  end
 end
