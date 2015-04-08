@@ -1,11 +1,11 @@
 answer = $("div[data-id='<%= @answer.id %>']");
-answer.find('.answer-errors').html("");
+answer.find('.errors').html("");
 <% if @answer.errors.any? %>
   <% @answer.errors.full_messages.each do |msg|  %>
-    answer.find('.answer-errors').prepend("<p><%= msg %></p>");
+    answer.find('.errors').prepend("<p><%= msg %></p>");
   <% end  %>
 <% else  %>
-  html = $("<%= j render @answer %>");
-  answer.html(html.children());
+  answer_html = $("<%= j render @answer %>");
+  answer.html(answer_html.children());
 <% end %>
 

@@ -2,14 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
 
-  context 'validations' do
-    it { is_expected.to validate_presence_of :body }
-  end
+  it { is_expected.to belong_to :question}
+  it { is_expected.to have_many(:attachments).dependent(:destroy)}
 
-  context 'associations' do
-    it { is_expected.to belong_to :question}
-  end
+  it { is_expected.to validate_presence_of :body }
 
+  it { is_expected.to accept_nested_attributes_for(:attachments).allow_destroy(true) }
 
   describe '#best!' do
     let(:question) { create(:question) }

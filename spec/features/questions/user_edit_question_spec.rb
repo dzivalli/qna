@@ -38,7 +38,7 @@ feature 'Edit question' do
         click_on 'Save'
       end
 
-      within '.question-errors' do
+      within '.question .errors' do
         expect(page).to have_content "Title can't be blank"
         expect(page).to have_content "Body can't be blank"
       end

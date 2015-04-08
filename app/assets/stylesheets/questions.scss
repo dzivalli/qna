@@ -2,11 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.panel-form, .answer-form {
-  display: none;
-}
-
-.question-errors, .answer-errors {
+.errors {
   color: red;
 }
 

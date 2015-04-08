@@ -9,14 +9,22 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.new answer_params.merge(question: @question, user: current_user)
-    @answer.save
+    if @answer.save
+      @answer_new = Answer.new
+      @answer_new.attachments.build
+    end
   end
 
+
   def edit
+    @answer.attachments.build
+    render layout: false
   end
 
   def update
-    @answer.update answer_params if current_user.owns? @answer
+    if current_user.owns? @answer
+      @answer.update answer_params
+    end
   end
 
   def destroy
@@ -31,7 +39,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
   end
 
   def find_question

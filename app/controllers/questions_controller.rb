@@ -1,18 +1,21 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy, :show]
+  before_action :find_question, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
+    @question = Question.includes(:attachments).find params[:id]
     @answers = @question.answers.best_first
     @answer = Answer.new
+    @answer.attachments.build
   end
 
   def new
     @question = Question.new
+    @question.attachments.build
   end
 
   def create
@@ -26,10 +29,15 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    @question.attachments.build
+    render layout: false
   end
 
   def update
-    @question.update question_params if current_user.owns? @question
+    if current_user.owns? @question
+      @question.update question_params
+      @question.attachments.build
+    end
   end
 
   def destroy
@@ -45,7 +53,7 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
   end
 
   def find_question

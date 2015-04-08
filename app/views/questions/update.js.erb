@@ -1,8 +1,9 @@
-$('.question-errors').html("");
+question = $('.question');
+question.find('.errors').html("");
 <% if @question.errors.any? %>
   <% @question.errors.full_messages.each do |msg|  %>
-    $('.question-errors').prepend("<p><%= msg %></p>");
+    question.find('.errors').prepend("<p><%= msg %></p>");
   <% end  %>
 <% else  %>
-  $('.question').html("<%= j render 'question_form' %>");
+  question.html("<%= j render 'question_form' %>");
 <% end %>

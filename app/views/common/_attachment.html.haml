@@ -1,0 +1,8 @@
+- if a.object.new_record?
+  = a.file_field :file
+- else
+  %p{data: {file: "#{a.object.file_identifier}"}}
+    = label_tag a.object.file_identifier
+    = link_to '#', class: 'delete-attachment', data: { destroy: "#{a.object.id}"} do
+      %i.fa.fa-trash
+  = a.check_box '_destroy', class: 'hide', data: { destroy: "#{a.object.id}"}

@@ -1,0 +1,8 @@
+= form_for [@question, @answer], html: {class: 'answer-form', remote: true} do |f|
+  .form-group
+    = f.text_area :body, class: 'form-control'
+  .form-group.file_fields
+    = f.fields_for :attachments do |a|
+      = render partial: 'common/attachment', locals: { a: a }
+  = f.submit 'Save', class: 'btn btn-default'
+  = button_tag 'Close', type: 'button', class: 'btn btn-default button-close'

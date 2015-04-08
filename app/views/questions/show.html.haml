@@ -1,13 +1,13 @@
-.question-errors
-.question
+.question.box
   = render 'question_form'
 
 %h4 Answers:
 %ul.list-group
   = render @answers
 
-%h4 Your answer:
-= render 'answers/form'
+- if user_signed_in?
+  %h4 Your answer:
+  = render partial: 'answers/form', locals: { answer: @answer }
 
 
 

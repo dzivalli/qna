@@ -1,4 +1,5 @@
-.panel.panel-default.panel-question
+.errors
+.panel.panel-default.panel-question.body
   .panel-heading
     .panel-title
       = @question.title
@@ -10,16 +11,7 @@
             %i.fa.fa-trash
   .panel-body
     = @question.body
-    = @question.body
-
-= form_for @question, remote: true, html: { class: 'panel-form' } do |f|
-  .panel.panel-default
-    .panel-heading
-      .panel-title
-        = f.text_field :title, class: 'form-control'
-        .pull-right
-    .panel-body
-      = f.text_area :body, class: 'form-control'
-    .panel-body
-      = f.submit 'Save', class: 'btn btn-default'
-      = button_tag 'Close', type: 'button', class: 'btn btn-default', id: 'close'
+  .panel-body
+    - @question.attachments.each do |attachment|
+      %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
+.form{data: {url: edit_question_path(@question)}}
