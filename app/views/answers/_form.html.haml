@@ -1,5 +1,5 @@
 .box.answer
-  = form_for [@question, answer], remote: true do |f|
+  = form_for [@question, answer], remote: true, html: { data: { type: 'json' } } do |f|
     .form-group
       = f.label :body, 'Text'
       .errors

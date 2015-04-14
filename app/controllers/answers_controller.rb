@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
       @answer_new = Answer.new
       @answer_new.attachments.build
       respond_to do |format|
-        format.json { render json: @answer }
+        format.json { render json: @answer.to_json(include: :attachments) }
       end
     else
       respond_to do |format|

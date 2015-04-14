@@ -23,39 +23,39 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when valid parameters' do
       it 'creates a new answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :json }
             .to change(question.answers, :count).by(1)
       end
 
       it 'belongs to user who created it' do
-        post :create, question_id: question, answer: {body: 'www'}, format: :js
+        post :create, question_id: question, answer: {body: 'www'}, format: :json
 
         expect(Answer.find_by_body('www').user).to eq @user
       end
 
       it 'builds new answer' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        post :create, question_id: question, answer: attributes_for(:answer), format: :json
 
         expect(assigns(:answer_new)).to be_a_new(Answer)
       end
 
-      it 'renders create template' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+      it 'answers with status 200' do
+        post :create, question_id: question, answer: attributes_for(:answer), format: :json
 
-        expect(response).to render_template 'create'
+        expect(response).to have_http_status 200
       end
     end
 
     context 'when invalid parameters' do
       it 'does not create a new answer' do
-        expect { post :create, question_id: question, answer: {body: nil}, format: :js }
+        expect { post :create, question_id: question, answer: {body: nil}, format: :json }
             .to_not change(Answer, :count)
       end
 
-      it 're-renders create template' do
-        post :create, question_id: question, answer: {body: nil}, format: :js
+      it 'answers with status 422' do
+        post :create, question_id: question, answer: {body: nil}, format: :json
 
-        expect(response).to render_template :create
+        expect(response).to have_http_status 422
       end
     end
   end

@@ -38,15 +38,30 @@ init = ->
 
   $('form.new_answer').on 'ajax:success', (e, answer, status) ->
     $this = $(this)
+
     answer_template = _.template window.answer
-    $('.list-group').append(answer_template(answer))
+    attachment_template = _.template window.attachment
+
+    if answer.attachments
+      attachments_html = ''
+      $.each answer.attachments, (key, value) ->
+        value['name'] = value.file.url.split('/').pop()
+        attachments_html += attachment_template(value)
+
+    full_answer = $(answer_template(answer))
+    full_answer.find('.attachments').html(attachments_html)
+    $('.list-group').append(full_answer)
+
     $this.find('textarea').val('')
     $this.find('.errors').html('')
+    $this.find('input:file').each ->
+      $(this).remove() unless $(this).attr('id')
   .on 'ajax:error', (e, xhr, status, error) ->
     $this = $(this)
     errors = xhr.responseJSON
-    $.each errors, (key, value) ->
-      $this.find('.errors').html(value)
+    if errors
+      $.each errors, (key, value) ->
+        $this.find('.errors').html(value)
 
 $(document).ready init
 $(document). on 'page:load', init

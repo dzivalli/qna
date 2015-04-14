@@ -13,6 +13,8 @@ window.answer = '''
               <%= body %>
             </div>
             <br>
+            <div class="attachments">
+            </div>
             <a class="edit" href="/questions/<%= question_id %>/answers/<%= id %>/edit"><i class="fa fa-pencil"></i>
             </a>
             <a class="delete" data-remote="true" rel="nofollow" data-method="delete" href="/questions/<%= question_id %>/answers/<%= id %>"><i class="fa fa-trash"></i>
@@ -29,4 +31,10 @@ window.answer = '''
       </div>
     </div>
   </div>
+'''
+
+window.attachment = '''
+  <p>
+    <a href="<%= file.url %>"><%= name %></a>
+  </p>
 '''
