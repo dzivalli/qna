@@ -1,6 +1,8 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+
+#= require templates
 init = ->
   $('body').on 'click', '.edit', (e) ->
     e.preventDefault()
@@ -32,6 +34,19 @@ init = ->
     id = $(this).data('destroy')
     $(this).parent('p').siblings("input[data-destroy=#{id}]").prop('checked', true)
     $(this).parent('p').remove()
+
+
+  $('form.new_answer').on 'ajax:success', (e, answer, status) ->
+    $this = $(this)
+    answer_template = _.template window.answer
+    $('.list-group').append(answer_template(answer))
+    $this.find('textarea').val('')
+    $this.find('.errors').html('')
+  .on 'ajax:error', (e, xhr, status, error) ->
+    $this = $(this)
+    errors = xhr.responseJSON
+    $.each errors, (key, value) ->
+      $this.find('.errors').html(value)
 
 $(document).ready init
 $(document). on 'page:load', init

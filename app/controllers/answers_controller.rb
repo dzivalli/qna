@@ -12,6 +12,13 @@ class AnswersController < ApplicationController
     if @answer.save
       @answer_new = Answer.new
       @answer_new.attachments.build
+      respond_to do |format|
+        format.json { render json: @answer }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
