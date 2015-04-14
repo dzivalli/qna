@@ -82,7 +82,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when valid parameters' do
       before do
-        patch :update, question_id: question, id: answer, answer: {body: 'aaa'}, format: :js
+        patch :update, question_id: question, id: answer, answer: {body: 'aaa'}, format: :json
       end
 
       it 'updates answer with given params' do
@@ -90,23 +90,23 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq 'aaa'
       end
 
-      it { is_expected.to render_template :update }
+      it 'answers with 200 status' do
+        expect(response).to have_http_status :success
+      end
     end
 
     context 'when invalid parameters' do
       it 'does not update answer' do
-        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :js
+        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :json
 
         answer.reload
         expect(answer.body).to be_truthy
-        # expect { post :update, question_id: question, id: answer, answer: {body: nil}, format: :js }
-        #     .to_not change(answer, :body)
       end
 
-      it 'renders update template' do
-        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :js
+      it 'answers with 422 status' do
+        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :json
 
-        expect(response).to render_template :update
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 

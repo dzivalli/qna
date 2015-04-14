@@ -37,31 +37,42 @@ init = ->
 
 
   $('form.new_answer').on 'ajax:success', (e, answer, status) ->
-    $this = $(this)
+    $('.list-group').append(generate_answer(answer))
+    clean($(this))
+  .on 'ajax:error', ajax_error
 
-    answer_template = _.template window.answer
-    attachment_template = _.template window.attachment
+  $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
+    $(this).closest('.box').replaceWith(generate_answer(answer))
+  .on 'ajax:error', 'form.answer-form',  ajax_error
 
-    if answer.attachments
-      attachments_html = ''
-      $.each answer.attachments, (key, value) ->
-        value['name'] = value.file.url.split('/').pop()
-        attachments_html += attachment_template(value)
 
-    full_answer = $(answer_template(answer))
-    full_answer.find('.attachments').html(attachments_html)
-    $('.list-group').append(full_answer)
+ajax_error = (e, xhr, status, error) ->
+  $this = $(this)
+  errors = xhr.responseJSON
+  if errors
+    $.each errors, (key, value) ->
+      $this.find('.errors').html(value)
 
-    $this.find('textarea').val('')
-    $this.find('.errors').html('')
-    $this.find('input:file').each ->
-      $(this).remove() unless $(this).attr('id')
-  .on 'ajax:error', (e, xhr, status, error) ->
-    $this = $(this)
-    errors = xhr.responseJSON
-    if errors
-      $.each errors, (key, value) ->
-        $this.find('.errors').html(value)
+
+generate_answer = (answer) ->
+  answer_template = _.template window.answer
+  attachment_template = _.template window.attachment
+
+  if answer.attachments
+    attachments_html = ''
+    $.each answer.attachments, (key, value) ->
+      value['name'] = value.file.url.split('/').pop()
+      attachments_html += attachment_template(value)
+
+  full_answer = $(answer_template(answer))
+  full_answer.find('.attachments').html(attachments_html)
+  full_answer
+
+clean = ($form) ->
+  $form.find('textarea').val('')
+  $form.find('.errors').html('')
+  $form.find('input:file').each ->
+    $(this).remove() unless $(this).attr('id')
 
 $(document).ready init
 $(document). on 'page:load', init

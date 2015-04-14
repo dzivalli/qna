@@ -30,7 +30,13 @@ class AnswersController < ApplicationController
 
   def update
     if current_user.owns? @answer
-      @answer.update answer_params
+      respond_to do |format|
+        if @answer.update answer_params
+          format.json { render json: @answer.to_json(include: :attachments) }
+        else
+          format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        end
+      end
     end
   end
 
