@@ -39,10 +39,10 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer_new)).to be_a_new(Answer)
       end
 
-      it 'answers with status 200' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :json
+      it 'returns json with answer' do
+        post :create, question_id: question, answer: {body: 'www'}, format: :json
 
-        expect(response).to have_http_status 200
+        expect(response.body).to  eq(assigns(:answer).to_json(include: :attachments))
       end
     end
 
@@ -83,15 +83,16 @@ RSpec.describe AnswersController, type: :controller do
     context 'when valid parameters' do
       before do
         patch :update, question_id: question, id: answer, answer: {body: 'aaa'}, format: :json
+
+        answer.reload
       end
 
       it 'updates answer with given params' do
-        answer.reload
         expect(answer.body).to eq 'aaa'
       end
 
-      it 'answers with 200 status' do
-        expect(response).to have_http_status :success
+      it 'returns json with answer' do
+        expect(response.body).to eq assigns(:answer).to_json(include: :attachments)
       end
     end
 

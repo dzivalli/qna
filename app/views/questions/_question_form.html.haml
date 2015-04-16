@@ -1,17 +1,29 @@
 .errors
-.panel.panel-default.panel-question.body
-  .panel-heading
-    .panel-title
-      = @question.title
-      .pull-right
-        - if current_user && current_user.owns?(@question)
-          = link_to edit_question_path(@question), class: 'edit' do
-            %i.fa.fa-pencil
-          = link_to question_path(@question), method: :delete, class: 'delete' do
-            %i.fa.fa-trash
-  .panel-body
-    = @question.body
-  .panel-body
-    - @question.attachments.each do |attachment|
-      %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
-.form{data: {url: edit_question_path(@question)}}
+.row
+  .col-sm-1
+    .score
+      .row
+        .votes= @question.votes
+      - if user_signed_in?
+        .row
+          = link_to up_question_path(@question), class: 'up', remote: true do
+            %i.fa.fa-plus
+          = link_to down_question_path(@question), class: 'down', remote: true do
+            %i.fa.fa-minus
+  .col-sm-9
+    .panel.panel-default.panel-question.body
+      .panel-heading
+        .panel-title
+          = @question.title
+          .pull-right
+            - if current_user && current_user.owns?(@question)
+              = link_to edit_question_path(@question), class: 'edit' do
+                %i.fa.fa-pencil
+              = link_to question_path(@question), method: :delete, class: 'delete' do
+                %i.fa.fa-trash
+      .panel-body
+        = @question.body
+      .panel-body
+        - @question.attachments.each do |attachment|
+          %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
+    .form{data: {url: edit_question_path(@question)}}

@@ -45,6 +45,8 @@ init = ->
     $(this).closest('.box').replaceWith(generate_answer(answer))
   .on 'ajax:error', 'form.answer-form',  ajax_error
 
+  $('.score a').on 'ajax:success', (e, votes, status) ->
+    $(this).closest('.score').find('.votes').html(votes)
 
 ajax_error = (e, xhr, status, error) ->
   $this = $(this)

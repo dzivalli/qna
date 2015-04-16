@@ -7,4 +7,12 @@ class Question < ActiveRecord::Base
 
   validates :title, presence: true
   validates :body, presence: true
+
+  def vote_up!
+    update votes: votes + 1
+    end
+
+  def vote_down!
+    update votes: votes - 1
+  end
 end

@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy]
+  before_action :find_question, only: [:edit, :update, :destroy, :up, :down]
 
   def index
     @questions = Question.all
@@ -48,6 +48,20 @@ class QuestionsController < ApplicationController
       redirect_to @question
     end
 
+  end
+
+  def up
+    @question.vote_up!
+    respond_to do |format|
+      format.json { render json: @question.votes }
+    end
+  end
+
+  def down
+    @question.vote_down!
+    respond_to do |format|
+      format.json { render json: @question.votes }
+    end
   end
 
   private
