@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :find_question
-  before_action :find_answer, only: [:edit, :update, :destroy, :choice]
+  before_action :find_answer, only: [:edit, :update, :destroy, :choice, :up, :down]
 
   def new
     @answer = Answer.new
@@ -46,6 +46,20 @@ class AnswersController < ApplicationController
 
   def choice
     @answer.best! if current_user.owns? @question
+  end
+
+  def up
+    @answer.vote_up!
+    respond_to do |format|
+      format.json { render json: @answer.votes }
+    end
+  end
+
+  def down
+    @answer.vote_down!
+    respond_to do |format|
+      format.json { render json: @answer.votes }
+    end
   end
 
 

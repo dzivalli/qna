@@ -5,6 +5,15 @@
         .sign
           - if answer.best
             %i.fa.fa-check-circle.fa-4x
+        .score
+          .row
+            .votes= answer.votes
+          - if user_signed_in?
+            .row
+              = link_to up_question_answer_path(@question, answer), class: 'up', remote: true do
+                %i.fa.fa-plus
+              = link_to down_question_answer_path(@question, answer), class: 'down', remote: true do
+                %i.fa.fa-minus
       .col-sm-9
         %li.list-group-item
           .answer-body

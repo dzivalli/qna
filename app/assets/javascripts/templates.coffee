@@ -5,6 +5,20 @@ window.answer = '''
       <div class="row">
         <div class="col-sm-1">
           <div class="sign">
+            <% if ( best ) { %>
+              <i class="fa fa-check-circle fa-4x"></i>
+            <% } %>
+          </div>
+          <div class="score">
+            <div class="row">
+              <div class="votes"><%= votes %></div>
+            </div>
+            <div class="row">
+              <a class="up" data-remote="true" href="/questions/<%= question_id %>/answers/<%= id %>/up"><i class="fa fa-plus"></i>
+              </a>
+              <a class="down" data-remote="true" href="/questions/<%= question_id %>/answers/<%= id %>/down"><i class="fa fa-minus"></i>
+              </a>
+            </div>
           </div>
         </div>
         <div class="col-sm-9">

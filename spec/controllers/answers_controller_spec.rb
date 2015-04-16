@@ -178,4 +178,66 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'GET #up' do
+    let(:question) { create(:question) }
+    let!(:answer) { create(:answer, question: question) }
+
+    context 'when user is authorized' do
+      log_in
+
+      before do
+        xhr :get, :up, question_id: question, id: answer
+
+        answer.reload
+      end
+
+      it 'increases vote counter to 1', format: :json do
+        expect(answer.votes).to eq 1
+      end
+
+      it_behaves_like 'returnable json object with answer votes'
+    end
+
+    context 'when user is unauthorized' do
+      before do
+        xhr :get, :up, question_id: question, id: answer
+
+        answer.reload
+      end
+
+      it_behaves_like 'unauthorized for answer vote'
+    end
+  end
+
+  describe 'GET #down' do
+    let(:question) { create(:question) }
+    let!(:answer) { create(:answer) }
+
+    context 'when user is authorized' do
+      log_in
+
+      before do
+        xhr :get, :down, question_id: question, id: answer
+
+        answer.reload
+      end
+
+      it 'decreases votes by 1' do
+        expect(answer.votes).to eq -1
+      end
+
+      it_behaves_like 'returnable json object with answer votes'
+    end
+
+    context 'when user is unauthorized' do
+      before do
+        xhr :get, :down, question_id: question, id: answer
+
+        answer.reload
+      end
+
+      it_behaves_like 'unauthorized for answer vote'
+    end
+  end
+
 end

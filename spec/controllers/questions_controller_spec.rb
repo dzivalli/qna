@@ -222,7 +222,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.votes).to eq 1
       end
 
-      it_behaves_like 'returnable json object with votes'
+      it_behaves_like 'returnable json object with question votes'
     end
 
     context 'when user is unauthorized' do
@@ -232,7 +232,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
       end
 
-      it_behaves_like 'unauthorized'
+      it_behaves_like 'unauthorized for question vote'
     end
   end
 
@@ -252,7 +252,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.votes).to eq -1
       end
 
-      it_behaves_like 'returnable json object with votes'
+      it_behaves_like 'returnable json object with question votes'
     end
 
     context 'when user is unauthorized' do
@@ -262,7 +262,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
       end
 
-      it_behaves_like 'unauthorized'
+      it_behaves_like 'unauthorized for question vote'
     end
   end
 end

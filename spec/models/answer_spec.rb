@@ -26,6 +26,21 @@ RSpec.describe Answer, type: :model do
     it 'updates best to true for that question' do
       expect(best_answer.best).to be_truthy
     end
+  end
 
+  describe '.vote_up!' do
+    let!(:answer) { create(:answer) }
+
+    it 'increases votes by 1' do
+      expect{ answer.vote_up! }.to change(answer, :votes).by(1)
+    end
+  end
+
+  describe '.vote_down!' do
+    let!(:answer) { create(:answer) }
+
+    it 'decreases votes by 1' do
+      expect{ answer.vote_down! }.to change(answer, :votes).by(-1)
+    end
   end
 end
