@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 feature 'Owner voting' do
-  let(:user) { create(:user) }
-  let!(:question) { create(:question, user: user) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question) }
+  given!(:answer) { create(:answer, user: user, question: question) }
+
 
   background do
     log_in user
@@ -10,8 +12,8 @@ feature 'Owner voting' do
     visit question_path(question)
   end
 
-  scenario 'question owner cannot vote for it', js: true do
-    within '.question' do
+  scenario 'answer owner cannot vote for it', js: true do
+    within data_id(answer) do
       page.find('.up').click
 
       within '.score' do
@@ -20,8 +22,8 @@ feature 'Owner voting' do
     end
   end
 
-  scenario 'question owner cannot vote against it', js: true do
-    within '.question' do
+  scenario 'answer owner cannot vote against it', js: true do
+    within data_id(answer) do
       page.find('.down').click
 
       within '.score' do

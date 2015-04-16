@@ -207,6 +207,20 @@ RSpec.describe AnswersController, type: :controller do
 
       it_behaves_like 'unauthorized for answer vote'
     end
+
+    context 'when user is owner' do
+      log_in
+
+      before do
+        @user.answers << answer
+
+        xhr :get, :up, question_id: question, id: answer
+
+        answer.reload
+      end
+
+      it_behaves_like 'unauthorized for answer vote'
+    end
   end
 
   describe 'GET #down' do
@@ -231,6 +245,20 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when user is unauthorized' do
       before do
+        xhr :get, :down, question_id: question, id: answer
+
+        answer.reload
+      end
+
+      it_behaves_like 'unauthorized for answer vote'
+    end
+
+    context 'when user is owner' do
+      log_in
+
+      before do
+        @user.answers << answer
+
         xhr :get, :down, question_id: question, id: answer
 
         answer.reload
