@@ -207,7 +207,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #up' do
-    let!(:question) { create(:question) }
+    let(:question) { create(:question) }
 
     context 'when user is authorized' do
       log_in
@@ -227,6 +227,20 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'when user is unauthorized' do
       before do
+        xhr :get, :up, id: question
+
+        question.reload
+      end
+
+      it_behaves_like 'unauthorized for question vote'
+    end
+
+    context 'when user is owner' do
+      log_in
+
+      before do
+        @user.questions << question
+
         xhr :get, :up, id: question
 
         question.reload
@@ -257,6 +271,20 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'when user is unauthorized' do
       before do
+        xhr :get, :down, id: question
+
+        question.reload
+      end
+
+      it_behaves_like 'unauthorized for question vote'
+    end
+
+    context 'when user is owner' do
+      log_in
+
+      before do
+        @user.questions << question
+
         xhr :get, :down, id: question
 
         question.reload
