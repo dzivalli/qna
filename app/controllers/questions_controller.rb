@@ -52,10 +52,10 @@ class QuestionsController < ApplicationController
 
   def up
     respond_to do |format|
-      if current_user.owns?(@question)
+      if current_user.owns?(@question) || @question.vote_of(current_user) == 1
         format.json { render json: @question.votes, status: :unauthorized }
       else
-        @question.vote_up!
+        @question.vote_up!(current_user)
         format.json { render json: @question.votes }
       end
     end
@@ -63,10 +63,10 @@ class QuestionsController < ApplicationController
 
   def down
     respond_to do |format|
-      if current_user.owns?(@question)
+      if current_user.owns?(@question) || @question.vote_of(current_user) == -1
         format.json { render json: @question.votes, status: :unauthorized }
       else
-        @question.vote_down!
+        @question.vote_down!(current_user)
         format.json { render json: @question.votes }
       end
     end
