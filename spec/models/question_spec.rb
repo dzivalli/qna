@@ -29,7 +29,7 @@ RSpec.describe Question, type: :model do
 
     context 'when previous vote was negative' do
       before do
-        question.question_votes.create user: user, positive: false
+        question.vote_down!(user)
 
         question.vote_up!(user)
       end
@@ -62,7 +62,7 @@ RSpec.describe Question, type: :model do
 
     context 'when previous vote was positive' do
       before do
-        question.question_votes.create user: user, positive: true
+        question.vote_up!(user)
 
         question.vote_down!(user)
       end

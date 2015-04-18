@@ -221,6 +221,24 @@ RSpec.describe AnswersController, type: :controller do
 
       it_behaves_like 'unauthorized for answer vote'
     end
+
+    context 'when authorized user vote several times' do
+      log_in
+
+      before do
+        2.times { xhr :get, :up, question_id: question, id: answer }
+
+        answer.reload
+      end
+
+      it 'increases votes counter by 1' do
+        expect(answer.votes).to eq 1
+      end
+
+      it 'returns status 401' do
+        expect(response).to have_http_status :unauthorized
+      end
+    end
   end
 
   describe 'GET #down' do
@@ -266,6 +284,25 @@ RSpec.describe AnswersController, type: :controller do
 
       it_behaves_like 'unauthorized for answer vote'
     end
+
+    context 'when authorized user vote several times' do
+      log_in
+
+      before do
+        2.times { xhr :get, :down, question_id: question, id: answer }
+
+        answer.reload
+      end
+
+      it 'increases votes counter by 1' do
+        expect(answer.votes).to eq -1
+      end
+
+      it 'returns status 401' do
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
   end
 
 end

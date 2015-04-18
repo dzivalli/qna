@@ -30,4 +30,42 @@ module FeatureHelpers
       click_on 'Save'
     end
   end
+
+  def expect_change_vote_by_1_after_2_click_on_up
+    2.times do
+      page.find('.up').click
+
+      within '.score' do
+        expect(page).to have_content '1'
+      end
+    end
+  end
+
+  def expect_change_vote_by_minus_1_after_2_click_on_up
+    2.times do
+      page.find('.down').click
+
+      within '.score' do
+        expect(page).to have_content '-1'
+      end
+    end
+  end
+
+  def expect_vote_to_undo_after_click_on_up
+    page.find('.up').click
+    page.find('.down').click
+
+    within '.score' do
+      expect(page).to have_content '0'
+    end
+  end
+
+  def expect_vote_to_undo_after_click_do_down
+    page.find('.down').click
+    page.find('.up').click
+
+    within '.score' do
+      expect(page).to have_content '0'
+    end
+  end
 end
