@@ -68,4 +68,28 @@ module FeatureHelpers
       expect(page).to have_content '0'
     end
   end
+
+  def vote_up_by(user, selector)
+    log_in user
+
+    visit question_path(question)
+
+    within selector do
+      page.find('.up').click
+    end
+
+    click_on 'Sign out'
+  end
+
+  def vote_down_by(user, selector)
+    log_in user
+
+    visit question_path(question)
+
+    within selector do
+      page.find('.down').click
+    end
+
+    click_on 'Sign out'
+  end
 end

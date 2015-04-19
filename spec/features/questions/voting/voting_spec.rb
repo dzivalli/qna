@@ -37,6 +37,6 @@ feature 'Question voting' do
     visit question_path(question)
 
     expect(page).to_not have_selector '.up'
-    expect(page).to_not have_selector '.up'
+    expect(page).to_not have_selector '.down'
   end
 end
