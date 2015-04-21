@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  include VotableCntr
+
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:edit, :update, :destroy, :up, :down]
 
@@ -47,29 +49,14 @@ class QuestionsController < ApplicationController
     else
       redirect_to @question
     end
-
   end
 
   def up
-    respond_to do |format|
-      if current_user.owns?(@question) || @question.vote_of(current_user) == 1
-        format.json { render json: @question.votes, status: :unauthorized }
-      else
-        @question.vote_up!(current_user)
-        format.json { render json: @question.votes }
-      end
-    end
+    up_vote @question
   end
 
   def down
-    respond_to do |format|
-      if current_user.owns?(@question) || @question.vote_of(current_user) == -1
-        format.json { render json: @question.votes, status: :unauthorized }
-      else
-        @question.vote_down!(current_user)
-        format.json { render json: @question.votes }
-      end
-    end
+    down_vote @question
   end
 
   private

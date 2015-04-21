@@ -11,20 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150418202057) do
+ActiveRecord::Schema.define(version: 20150419115943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "answer_votes", force: :cascade do |t|
-    t.integer  "answer_id"
-    t.integer  "user_id"
-    t.boolean  "positive"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "answer_votes", ["answer_id", "user_id"], name: "index_answer_votes_on_answer_id_and_user_id", using: :btree
 
   create_table "answers", force: :cascade do |t|
     t.integer  "question_id"
@@ -49,16 +39,6 @@ ActiveRecord::Schema.define(version: 20150418202057) do
 
   add_index "attachments", ["attachable_id", "attachable_type"], name: "index_attachments_on_attachable_id_and_attachable_type", using: :btree
 
-  create_table "question_votes", force: :cascade do |t|
-    t.integer  "question_id"
-    t.integer  "user_id"
-    t.boolean  "positive"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "question_votes", ["question_id", "user_id"], name: "index_question_votes_on_question_id_and_user_id", using: :btree
-
   create_table "questions", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
@@ -69,6 +49,17 @@ ActiveRecord::Schema.define(version: 20150418202057) do
   end
 
   add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
+
+  create_table "user_votes", force: :cascade do |t|
+    t.boolean  "positive"
+    t.integer  "user_id"
+    t.integer  "votable_id"
+    t.string   "votable_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "user_votes", ["votable_type", "votable_id"], name: "index_user_votes_on_votable_type_and_votable_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -88,11 +79,7 @@ ActiveRecord::Schema.define(version: 20150418202057) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "answer_votes", "answers"
-  add_foreign_key "answer_votes", "users"
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
-  add_foreign_key "question_votes", "questions"
-  add_foreign_key "question_votes", "users"
   add_foreign_key "questions", "users"
 end

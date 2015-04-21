@@ -187,7 +187,6 @@ RSpec.describe AnswersController, type: :controller do
 
       before do
         xhr :get, :up, question_id: question, id: answer
-
         answer.reload
       end
 
@@ -201,11 +200,11 @@ RSpec.describe AnswersController, type: :controller do
     context 'when user is unauthorized' do
       before do
         xhr :get, :up, question_id: question, id: answer
-
         answer.reload
       end
 
-      it_behaves_like 'unauthorized for answer vote'
+      it_behaves_like 'did not changed answer votes'
+      it_behaves_like 'unauthorized'
     end
 
     context 'when user is owner' do
@@ -213,13 +212,12 @@ RSpec.describe AnswersController, type: :controller do
 
       before do
         @user.answers << answer
-
         xhr :get, :up, question_id: question, id: answer
-
         answer.reload
       end
 
-      it_behaves_like 'unauthorized for answer vote'
+      it_behaves_like 'did not changed answer votes'
+      it_behaves_like 'forbidden'
     end
 
     context 'when authorized user vote several times' do
@@ -227,7 +225,6 @@ RSpec.describe AnswersController, type: :controller do
 
       before do
         2.times { xhr :get, :up, question_id: question, id: answer }
-
         answer.reload
       end
 
@@ -235,9 +232,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.votes).to eq 1
       end
 
-      it 'returns status 401' do
-        expect(response).to have_http_status :unauthorized
-      end
+      it_behaves_like 'forbidden'
     end
   end
 
@@ -250,7 +245,6 @@ RSpec.describe AnswersController, type: :controller do
 
       before do
         xhr :get, :down, question_id: question, id: answer
-
         answer.reload
       end
 
@@ -264,11 +258,11 @@ RSpec.describe AnswersController, type: :controller do
     context 'when user is unauthorized' do
       before do
         xhr :get, :down, question_id: question, id: answer
-
         answer.reload
       end
 
-      it_behaves_like 'unauthorized for answer vote'
+      it_behaves_like 'did not changed answer votes'
+      it_behaves_like 'unauthorized'
     end
 
     context 'when user is owner' do
@@ -276,13 +270,12 @@ RSpec.describe AnswersController, type: :controller do
 
       before do
         @user.answers << answer
-
         xhr :get, :down, question_id: question, id: answer
-
         answer.reload
       end
 
-      it_behaves_like 'unauthorized for answer vote'
+      it_behaves_like 'did not changed answer votes'
+      it_behaves_like 'forbidden'
     end
 
     context 'when authorized user vote several times' do
@@ -290,7 +283,6 @@ RSpec.describe AnswersController, type: :controller do
 
       before do
         2.times { xhr :get, :down, question_id: question, id: answer }
-
         answer.reload
       end
 
@@ -298,11 +290,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.votes).to eq -1
       end
 
-      it 'returns status 401' do
-        expect(response).to have_http_status :unauthorized
-      end
+      it_behaves_like 'forbidden'
     end
-
   end
-
 end
