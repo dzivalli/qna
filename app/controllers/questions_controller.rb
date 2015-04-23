@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  include VotableCntr
+  include Voted
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:edit, :update, :destroy, :up, :down]
@@ -49,14 +49,6 @@ class QuestionsController < ApplicationController
     else
       redirect_to @question
     end
-  end
-
-  def up
-    up_vote @question
-  end
-
-  def down
-    down_vote @question
   end
 
   private

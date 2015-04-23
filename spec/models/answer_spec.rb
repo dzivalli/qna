@@ -3,12 +3,7 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
 
   it { is_expected.to belong_to :question}
-  it { is_expected.to have_many(:attachments).dependent(:destroy)}
-  it { is_expected.to have_many(:user_votes).dependent(:destroy)}
-
   it { is_expected.to validate_presence_of :body }
-
-  it { is_expected.to accept_nested_attributes_for(:attachments).allow_destroy(true) }
 
   describe '#best!' do
     let(:question) { create(:question) }
@@ -29,31 +24,6 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  describe '.vote_up!' do
-    let(:user) { create(:user) }
-    subject(:votable) { create(:answer) }
-
-    it_behaves_like 'vote up'
-  end
-
-  describe '.vote_down!' do
-    let(:user) { create(:user) }
-    subject(:votable) { create(:answer) }
-
-    it_behaves_like 'vote down'
-  end
-
-  describe '.vote_positive?' do
-    let(:user) { create(:user) }
-    subject(:votable) { create(:answer) }
-
-    it_behaves_like 'positive vote'
-  end
-
-  describe '.vote_negative?' do
-    let(:user) { create(:user) }
-    subject(:votable) { create(:answer) }
-
-    it_behaves_like 'negative vote'
-  end
+  it_behaves_like 'attachable'
+  it_behaves_like 'votable'
 end

@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  include VotableCntr
+  include Voted
 
   before_action :authenticate_user!, except: :show
   before_action :find_question
@@ -49,15 +49,6 @@ class AnswersController < ApplicationController
   def choice
     @answer.best! if current_user.owns? @question
   end
-
-  def up
-    up_vote @answer
-  end
-
-  def down
-    down_vote @answer
-  end
-
 
   private
 

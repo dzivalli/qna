@@ -221,7 +221,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.votes).to eq 1
       end
 
-      it_behaves_like 'returnable json object with question votes'
+      it 'returns json object with votes', format: :json do
+        expect(response.body).to eq question.votes.to_s
+      end
     end
 
     context 'when user is unauthorized' do
@@ -230,8 +232,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
       end
 
-      it_behaves_like 'did not changed question votes'
-      it_behaves_like 'unauthorized'
+      it_behaves_like 'unauthorized for question'
     end
 
     context 'when user is owner' do
@@ -243,8 +244,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
       end
 
-      it_behaves_like 'did not changed question votes'
-      it_behaves_like 'forbidden'
+      it_behaves_like 'forbidden for question'
     end
 
     context 'when authorized user vote several times' do
@@ -259,7 +259,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.votes).to eq 1
       end
 
-      it_behaves_like 'forbidden'
+      it 'returns status 403' do
+        expect(response).to have_http_status :forbidden
+      end
     end
   end
 
@@ -278,7 +280,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.votes).to eq -1
       end
 
-      it_behaves_like 'returnable json object with question votes'
+      it 'returns json object with votes', format: :json do
+        expect(response.body).to eq question.votes.to_s
+      end
     end
 
     context 'when user is unauthorized' do
@@ -287,8 +291,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
       end
 
-      it_behaves_like 'did not changed question votes'
-      it_behaves_like 'unauthorized'
+      it_behaves_like 'unauthorized for question'
     end
 
     context 'when user is owner' do
@@ -300,8 +303,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
       end
 
-      it_behaves_like 'did not changed question votes'
-      it_behaves_like 'forbidden'
+      it_behaves_like 'forbidden for question'
     end
 
     context 'when authorized user vote several times' do
@@ -316,7 +318,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.votes).to eq -1
       end
 
-      it_behaves_like 'forbidden'
+      it 'returns status 403' do
+        expect(response).to have_http_status :forbidden
+      end
     end
   end
 end
