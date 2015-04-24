@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!, except: :show
   before_action :find_question
-  before_action :find_answer, only: [:edit, :update, :destroy, :choice, :up, :down]
+  before_action :find_votable, only: [:edit, :update, :destroy, :choice, :up, :down]
 
   def new
     @answer = Answer.new
@@ -60,7 +60,7 @@ class AnswersController < ApplicationController
     @question = Question.find params[:question_id]
   end
 
-  def find_answer
+  def find_votable
     @answer = Answer.find params[:id]
   end
 end

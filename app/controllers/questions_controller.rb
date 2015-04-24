@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy, :up, :down]
+  before_action :find_votable, only: [:edit, :update, :destroy, :up, :down]
 
   def index
     @questions = Question.all
@@ -57,7 +57,7 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
   end
 
-  def find_question
+  def find_votable
     @question = Question.find params[:id]
   end
 end

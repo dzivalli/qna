@@ -4,6 +4,7 @@ require 'spec_helper'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'shoulda/matchers'
+require 'with_model'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -31,7 +32,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FeatureHelpers
   config.extend SignIn
-
+  config.extend WithModel
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
