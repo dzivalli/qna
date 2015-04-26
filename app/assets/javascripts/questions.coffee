@@ -36,10 +36,11 @@ init = ->
     $(this).parent('p').remove()
 
 
-  $('form.new_answer').on 'ajax:success', (e, answer, status) ->
+  questionId = $('.question').data('question-id')
+  PrivatePub.subscribe "/questions/#{questionId}/answers", (data, channel) ->
+    answer = JSON.parse data.answer
     $('.list-group').append(generate_answer(answer))
-    clean($(this))
-  .on 'ajax:error', ajax_error
+    clean($('form.new_answer'))
 
   $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
     $(this).closest('.box').replaceWith(generate_answer(answer))

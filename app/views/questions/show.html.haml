@@ -1,4 +1,4 @@
-.question.box
+.question.box{data: {question_id: @question.id}}
   = render 'question_form'
 
 %h4 Answers:
@@ -9,6 +9,4 @@
   %h4 Your answer:
   = render partial: 'answers/form', locals: { answer: @answer }
 
-
-
-
+= subscribe_to "/questions/#{@question.id}/answers"

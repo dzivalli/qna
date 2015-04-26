@@ -14,13 +14,10 @@ class AnswersController < ApplicationController
     if @answer.save
       @answer_new = Answer.new
       @answer_new.attachments.build
-      respond_to do |format|
-        format.json { render json: @answer.to_json(include: :attachments) }
-      end
+      PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json(include: :attachments)
+      render nothing: true
     else
-      respond_to do |format|
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-      end
+      @answer
     end
   end
 
@@ -32,12 +29,10 @@ class AnswersController < ApplicationController
 
   def update
     if current_user.owns? @answer
-      respond_to do |format|
-        if @answer.update answer_params
-          format.json { render json: @answer.to_json(include: :attachments) }
-        else
-          format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-        end
+      if @answer.update answer_params
+        render json: @answer.to_json(include: :attachments)
+      else
+        render json: @answer.errors.full_messages, status: :unprocessable_entity
       end
     end
   end
