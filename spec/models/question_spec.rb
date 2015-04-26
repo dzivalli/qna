@@ -4,10 +4,8 @@ RSpec.describe Question, type: :model do
 
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :body }
-
   it { is_expected.to have_many(:answers).dependent(:destroy) }
-  it { is_expected.to have_many(:attachments).dependent(:destroy) }
 
-  it { is_expected.to accept_nested_attributes_for(:attachments).allow_destroy(true) }
-
+  it_behaves_like 'attachable'
+  it_behaves_like 'votable'
 end

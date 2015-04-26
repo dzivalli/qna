@@ -3,11 +3,7 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
 
   it { is_expected.to belong_to :question}
-  it { is_expected.to have_many(:attachments).dependent(:destroy)}
-
   it { is_expected.to validate_presence_of :body }
-
-  it { is_expected.to accept_nested_attributes_for(:attachments).allow_destroy(true) }
 
   describe '#best!' do
     let(:question) { create(:question) }
@@ -26,6 +22,8 @@ RSpec.describe Answer, type: :model do
     it 'updates best to true for that question' do
       expect(best_answer.best).to be_truthy
     end
-
   end
+
+  it_behaves_like 'attachable'
+  it_behaves_like 'votable'
 end

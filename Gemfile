@@ -38,6 +38,7 @@ gem 'devise'
 gem 'quiet_assets'
 gem 'carrierwave'
 gem 'remotipart'
+gem 'underscore-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -59,4 +60,5 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
+  gem 'with_model'
 end

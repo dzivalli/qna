@@ -1,7 +1,9 @@
 class AnswersController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!, except: :show
   before_action :find_question
-  before_action :find_answer, only: [:edit, :update, :destroy, :choice]
+  before_action :find_votable, only: [:edit, :update, :destroy, :choice, :up, :down]
 
   def new
     @answer = Answer.new
@@ -12,6 +14,13 @@ class AnswersController < ApplicationController
     if @answer.save
       @answer_new = Answer.new
       @answer_new.attachments.build
+      respond_to do |format|
+        format.json { render json: @answer.to_json(include: :attachments) }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -23,7 +32,13 @@ class AnswersController < ApplicationController
 
   def update
     if current_user.owns? @answer
-      @answer.update answer_params
+      respond_to do |format|
+        if @answer.update answer_params
+          format.json { render json: @answer.to_json(include: :attachments) }
+        else
+          format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        end
+      end
     end
   end
 
@@ -35,7 +50,6 @@ class AnswersController < ApplicationController
     @answer.best! if current_user.owns? @question
   end
 
-
   private
 
   def answer_params
@@ -46,7 +60,7 @@ class AnswersController < ApplicationController
     @question = Question.find params[:question_id]
   end
 
-  def find_answer
+  def find_votable
     @answer = Answer.find params[:id]
   end
 end
