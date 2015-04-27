@@ -35,12 +35,9 @@ init = ->
     $(this).parent('p').siblings("input[data-destroy=#{id}]").prop('checked', true)
     $(this).parent('p').remove()
 
+  subscribe_to_new_answers()
+  subscribe_to_new_questions()
 
-  questionId = $('.question').data('question-id')
-  PrivatePub.subscribe "/questions/#{questionId}/answers", (data, channel) ->
-    answer = JSON.parse data.answer
-    $('.list-group').append(generate_answer(answer))
-    clean($('form.new_answer'))
 
   $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
     $(this).closest('.box').replaceWith(generate_answer(answer))
@@ -56,6 +53,19 @@ ajax_error = (e, xhr, status, error) ->
     $.each errors, (key, value) ->
       $this.find('.errors').html(value)
 
+subscribe_to_new_answers = ->
+  questionId = $('.question').data('question-id')
+  PrivatePub.subscribe "/questions/#{questionId}/answers", (data, channel) ->
+    answer = JSON.parse data.answer
+    $('.list-group').append(generate_answer(answer))
+    clean($('form.new_answer'))
+
+subscribe_to_new_questions= ->
+  PrivatePub.subscribe "/questions", (data, channel) ->
+    debugger
+    question = data.question
+    question_template = _.template window.question
+    $('.list-group').append(question_template(question))
 
 generate_answer = (answer) ->
   answer_template = _.template window.answer

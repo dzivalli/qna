@@ -23,6 +23,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new question_params.merge(user: current_user)
     if @question.save
+      PrivatePub.publish_to "/questions", question: @question
       redirect_to @question, notice: 'Question was created'
     else
       flash[:notice] = 'Please, check input data'

@@ -49,6 +49,11 @@ window.attachment = '''
   </p>
 '''
 
+window.question = '''
+  <a class="list-group-item" href="/questions/<%= id %>"><h4 class="list-group-item-heading"><%= title %></h4>
+  </a>
+'''
+
 window.answerControls = '''
   <a class="edit" href="/questions/<%= question_id %>/answers/<%= id %>/edit"><i class="fa fa-pencil"></i>
   </a>
