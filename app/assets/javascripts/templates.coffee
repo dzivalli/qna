@@ -29,12 +29,8 @@ window.answer = '''
             <br>
             <div class="attachments">
             </div>
-            <a class="edit" href="/questions/<%= question_id %>/answers/<%= id %>/edit"><i class="fa fa-pencil"></i>
-            </a>
-            <a class="delete" data-remote="true" rel="nofollow" data-method="delete" href="/questions/<%= question_id %>/answers/<%= id %>"><i class="fa fa-trash"></i>
-            </a>
-            <a class="best" data-remote="true" href="/questions/<%= question_id %>/answers/<%= id %>/choice"><i class="fa fa-thumbs-o-up"></i>
-            </a>
+            <div class="answer-controls">
+            </div>
           </li>
         </div>
       </div>
@@ -51,4 +47,13 @@ window.attachment = '''
   <p>
     <a href="<%= file.url %>"><%= name %></a>
   </p>
+'''
+
+window.answerControls = '''
+  <a class="edit" href="/questions/<%= question_id %>/answers/<%= id %>/edit"><i class="fa fa-pencil"></i>
+  </a>
+  <a class="delete" data-remote="true" rel="nofollow" data-method="delete" href="/questions/<%= question_id %>/answers/<%= id %>"><i class="fa fa-trash"></i>
+  </a>
+  <a class="best" data-remote="true" href="/questions/<%= question_id %>/answers/<%= id %>/choice"><i class="fa fa-thumbs-o-up"></i>
+  </a>
 '''

@@ -17,5 +17,6 @@
 //= require twitter/bootstrap
 //= require turbolinks
 //= require underscore
+//= require js.cookie.js
 
 //= require_tree .

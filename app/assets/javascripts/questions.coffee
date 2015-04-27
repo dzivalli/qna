@@ -59,16 +59,21 @@ ajax_error = (e, xhr, status, error) ->
 
 generate_answer = (answer) ->
   answer_template = _.template window.answer
-  attachment_template = _.template window.attachment
+  full_answer = $(answer_template(answer))
 
   if answer.attachments
+    attachment_template = _.template window.attachment
     attachments_html = ''
     $.each answer.attachments, (key, value) ->
       value['name'] = value.file.url.split('/').pop()
       attachments_html += attachment_template(value)
+    full_answer.find('.attachments').html(attachments_html)
 
-  full_answer = $(answer_template(answer))
-  full_answer.find('.attachments').html(attachments_html)
+  userId = parseInt Cookies.get('user_id')
+  if userId == answer.user_id
+    answer_controls_template = _.template window.answerControls
+    full_answer.find('.answer-controls').html(answer_controls_template(answer))
+
   full_answer
 
 clean = ($form) ->
