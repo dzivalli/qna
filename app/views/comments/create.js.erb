@@ -1,0 +1,13 @@
+$error_field = $('.comments .errors');
+$error_field.html('');
+<% if @comment.errors.present? %>
+  <% @comment.errors.full_messages.each do |msg|  %>
+    $error_field.append("<p><%= msg %></p>");
+  <% end %>
+<% else %>
+  <% publish_to "/questions/#{@question.id}/comments" do %>
+    $comments = $('.question .comments');
+    $comments.find('.list-group').append("<%= j render @comment %>");
+    $comments.find('.comment-form').html('');
+  <% end %>
+<% end %>

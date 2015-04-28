@@ -13,5 +13,6 @@ Rails.application.routes.draw do
     resources :answers, concerns: :votable, except: :index do
       get 'choice', on: :member
     end
+    resource :comments, only: [:new, :create]
   end
 end

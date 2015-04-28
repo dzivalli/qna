@@ -2,7 +2,7 @@
   = render 'question_form'
 
 %h4 Answers:
-%ul.list-group
+%ul.list-group.answers
   = render @answers
 
 - if user_signed_in?
@@ -10,3 +10,4 @@
   = render partial: 'answers/form', locals: { answer: @answer }
 
 = subscribe_to "/questions/#{@question.id}/answers"
+= subscribe_to "/questions/#{@question.id}/comments"

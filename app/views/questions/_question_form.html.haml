@@ -26,4 +26,6 @@
       .panel-body
         - @question.attachments.each do |attachment|
           %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
+      .panel-body
+        = render template: 'comments/index'
     .form{data: {url: edit_question_path(@question)}}
