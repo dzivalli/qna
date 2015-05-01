@@ -1,4 +1,4 @@
-answer = $("div[data-id='<%= @answer.id %>']");
+answer = $("div[data-answer-id='<%= @answer.id %>']");
 answer.find('.errors').html("");
 <% if @answer.errors.any? %>
   <% @answer.errors.full_messages.each do |msg|  %>

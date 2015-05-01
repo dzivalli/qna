@@ -94,3 +94,7 @@ shared_examples 'attachable' do
   it { is_expected.to have_many(:attachments).dependent(:destroy) }
   it { is_expected.to accept_nested_attributes_for(:attachments).allow_destroy(true) }
 end
+
+shared_examples 'commentable' do
+  it { is_expected.to have_many(:comments).dependent(:destroy) }
+end

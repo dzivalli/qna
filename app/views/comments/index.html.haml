@@ -1,6 +1,0 @@
-.comments
-  %ul.list-group
-    = render @question.comments
-  = link_to 'Add comment', new_question_comments_path(@question), remote: true if user_signed_in?
-  .errors
-  .comment-form

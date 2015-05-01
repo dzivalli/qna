@@ -27,5 +27,5 @@
         - @question.attachments.each do |attachment|
           %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
       .panel-body
-        = render template: 'comments/index'
+        = render partial: 'comments/list', locals: { comments_parent: @question }
     .form{data: {url: edit_question_path(@question)}}

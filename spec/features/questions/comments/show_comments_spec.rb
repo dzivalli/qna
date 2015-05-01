@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Show question' do
+feature 'Show question comments' do
   given(:question) { create(:question) }
   given!(:comment) { create(:comment, commentable: question, body: 'www') }
 

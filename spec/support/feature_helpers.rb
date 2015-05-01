@@ -14,7 +14,7 @@ module FeatureHelpers
   end
 
   def data_id(answer)
-    "[data-id='#{answer.id}']"
+    "[data-answer-id='#{answer.id}']"
   end
 
   def add_files(selector, *files)

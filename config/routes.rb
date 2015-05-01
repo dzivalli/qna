@@ -9,10 +9,15 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: :votable do
+  concern :commentable do
+    resource :comments, only: [:new, :create]
+  end
+
+  resources :questions, concerns: [:votable, :commentable] do
     resources :answers, concerns: :votable, except: :index do
       get 'choice', on: :member
     end
-    resource :comments, only: [:new, :create]
   end
+
+  resources :answers, concerns: :commentable, only: []
 end

@@ -1,1 +1,1 @@
-$('.question .comment-form').html("<%= j render 'form' %>")
+$("<%= raw @comment_decorator.form %>").html("<%= j render 'form' %>")

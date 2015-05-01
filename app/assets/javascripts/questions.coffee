@@ -57,22 +57,22 @@ subscribe_to_new_answers = ->
   questionId = $('.question').data('question-id')
   PrivatePub.subscribe "/questions/#{questionId}/answers", (data, channel) ->
     answer = JSON.parse data.answer
-    $('.list-group').append(generate_answer(answer))
+    $('.list-group.answers').append(generate_answer(answer))
     clean($('form.new_answer'))
 
 subscribe_to_new_questions= ->
   PrivatePub.subscribe "/questions", (data, channel) ->
     debugger
     question = data.question
-    question_template = _.template window.question
+    question_template = _.template window.templates.question
     $('.list-group').append(question_template(question))
 
 generate_answer = (answer) ->
-  answer_template = _.template window.answer
+  answer_template = _.template window.templates.answer
   full_answer = $(answer_template(answer))
 
   if answer.attachments
-    attachment_template = _.template window.attachment
+    attachment_template = _.template window.templates.attachment
     attachments_html = ''
     $.each answer.attachments, (key, value) ->
       value['name'] = value.file.url.split('/').pop()
@@ -81,7 +81,7 @@ generate_answer = (answer) ->
 
   userId = parseInt Cookies.get('user_id')
   if userId == answer.user_id
-    answer_controls_template = _.template window.answerControls
+    answer_controls_template = _.template window.templates.answerControls
     full_answer.find('.answer-controls').html(answer_controls_template(answer))
 
   full_answer
