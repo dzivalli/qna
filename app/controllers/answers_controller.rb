@@ -16,8 +16,6 @@ class AnswersController < ApplicationController
       @answer_new.attachments.build
       PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json(include: :attachments)
       render nothing: true
-    else
-      @answer
     end
   end
 

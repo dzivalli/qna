@@ -20,7 +20,12 @@ class CommentsController < ApplicationController
   private
 
   def find_commentable
-    @commentable = Comment.find_parent(params) if Comment.find_parent(params)
+    klass = URI.parse(request.path).path.split('/')[1].singularize
+    if params["#{klass}_id"].to_i > 0
+      @commentable = klass.classify.safe_constantize.find_by_id params["#{klass}_id"] if klass.classify.safe_constantize
+    else
+      render nothing: true, status: :not_acceptable
+    end
   end
 
   def comment_params

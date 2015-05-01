@@ -30,7 +30,7 @@ window.templates =
               <div class="comments">
                 <ul class="list-group">
                 </ul>
-                <a data-remote="true" href="/answers/<%= id %>/comments/new">Add comment</a>
+                <a data-remote="true" href="/answers/219/comments/new">Add comment</a>
                 <div class="errors"></div>
                 <div class="comment-form"></div>
               </div>
