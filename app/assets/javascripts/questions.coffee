@@ -35,11 +35,9 @@ init = ->
     $(this).parent('p').siblings("input[data-destroy=#{id}]").prop('checked', true)
     $(this).parent('p').remove()
 
+  subscribe_to_new_answers()
+  subscribe_to_new_questions()
 
-  $('form.new_answer').on 'ajax:success', (e, answer, status) ->
-    $('.list-group').append(generate_answer(answer))
-    clean($(this))
-  .on 'ajax:error', ajax_error
 
   $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
     $(this).closest('.box').replaceWith(generate_answer(answer))
@@ -55,19 +53,37 @@ ajax_error = (e, xhr, status, error) ->
     $.each errors, (key, value) ->
       $this.find('.errors').html(value)
 
+subscribe_to_new_answers = ->
+  questionId = $('.question').data('question-id')
+  PrivatePub.subscribe "/questions/#{questionId}/answers", (data, channel) ->
+    answer = JSON.parse data.answer
+    $('.list-group.answers').append(generate_answer(answer))
+    clean($('form.new_answer'))
+
+subscribe_to_new_questions= ->
+  PrivatePub.subscribe "/questions", (data, channel) ->
+    debugger
+    question = data.question
+    question_template = _.template window.templates.question
+    $('.list-group').append(question_template(question))
 
 generate_answer = (answer) ->
-  answer_template = _.template window.answer
-  attachment_template = _.template window.attachment
+  answer_template = _.template window.templates.answer
+  full_answer = $(answer_template(answer))
 
   if answer.attachments
+    attachment_template = _.template window.templates.attachment
     attachments_html = ''
     $.each answer.attachments, (key, value) ->
       value['name'] = value.file.url.split('/').pop()
       attachments_html += attachment_template(value)
+    full_answer.find('.attachments').html(attachments_html)
 
-  full_answer = $(answer_template(answer))
-  full_answer.find('.attachments').html(attachments_html)
+  userId = parseInt Cookies.get('user_id')
+  if userId == answer.user_id
+    answer_controls_template = _.template window.templates.answerControls
+    full_answer.find('.answer-controls').html(answer_controls_template(answer))
+
   full_answer
 
 clean = ($form) ->

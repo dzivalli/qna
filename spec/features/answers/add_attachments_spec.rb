@@ -13,20 +13,20 @@ feature 'Owner can attach files to his answer and delete them' do
 
   context 'when answer is created' do
     background do
-      add_files("[data-id='#{answer.id}']",
+      add_files(data_id(answer),
                 "#{Rails.root}/spec/rails_helper.rb",
                 "#{Rails.root}/spec/spec_helper.rb")
     end
 
     scenario 'Attach files', js: true do
-      within "[data-id='#{answer.id}']" do
+      within data_id(answer) do
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
       end
     end
 
     scenario 'Delete files', js: true do
-      within "[data-id='#{answer.id}']" do
+      within data_id(answer) do
         page.find('.edit').click
 
         page.find("[data-file='spec_helper.rb'] .delete-attachment").click

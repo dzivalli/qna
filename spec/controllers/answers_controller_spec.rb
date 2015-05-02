@@ -39,24 +39,25 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer_new)).to be_a_new(Answer)
       end
 
-      it 'returns json with answer' do
-        post :create, question_id: question, answer: {body: 'www'}, format: :json
-
-        expect(response.body).to  eq(assigns(:answer).to_json(include: :attachments))
-      end
+      # now it works via comet
+      # it 'returns json with answer' do
+      #   post :create, question_id: question, answer: {body: 'www'}, format: :json
+      #
+      #   expect(response.body).to  eq(assigns(:answer).to_json(include: :attachments))
+      # end
     end
 
     context 'when invalid parameters' do
       it 'does not create a new answer' do
-        expect { post :create, question_id: question, answer: {body: nil}, format: :json }
+        expect { post :create, question_id: question, answer: {body: nil}, format: :js }
             .to_not change(Answer, :count)
       end
 
-      it 'answers with status 422' do
-        post :create, question_id: question, answer: {body: nil}, format: :json
-
-        expect(response).to have_http_status 422
-      end
+      # it 'answers with status 422' do
+      #   post :create, question_id: question, answer: {body: nil}, format: :json
+      #
+      #   expect(response).to have_http_status 422
+      # end
     end
   end
 

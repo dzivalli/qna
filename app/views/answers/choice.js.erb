@@ -1,4 +1,4 @@
 $('.sign').html('');
-el = $("[data-id='<%= @answer.id %>']");
+el = $("[data-answer-id='<%= @answer.id %>']");
 el.find('.sign').html("<i class='fa fa-check-circle fa-4x'></i>");
-el.prependTo('.list-group');
+el.prependTo('.list-group.answers');

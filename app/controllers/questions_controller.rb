@@ -9,8 +9,8 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.includes(:attachments).find params[:id]
-    @answers = @question.answers.best_first
+    @question = Question.includes(:attachments, :comments).find params[:id]
+    @answers = @question.answers.includes(:attachments, :comments).best_first
     @answer = Answer.new
     @answer.attachments.build
   end
@@ -23,6 +23,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new question_params.merge(user: current_user)
     if @question.save
+      PrivatePub.publish_to "/questions", question: @question
       redirect_to @question, notice: 'Question was created'
     else
       flash[:notice] = 'Please, check input data'

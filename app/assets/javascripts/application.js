@@ -13,8 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.remotipart
+//= require private_pub
 //= require twitter/bootstrap
 //= require turbolinks
 //= require underscore
+//= require js.cookie.js
 
 //= require_tree .

@@ -1,0 +1,6 @@
+.comments
+  %ul.list-group
+    = render comments_parent.comments
+  = link_to 'Add comment', new_polymorphic_path([comments_parent, :comments]), remote: true if user_signed_in?
+  .errors
+  .comment-form

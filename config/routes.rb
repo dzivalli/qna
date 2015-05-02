@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { sessions: "users/sessions" }
   root 'questions#index'
 
   concern :votable do
@@ -9,9 +9,15 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: :votable do
+  concern :commentable do
+    resource :comments, only: [:new, :create]
+  end
+
+  resources :questions, concerns: [:votable, :commentable] do
     resources :answers, concerns: :votable, except: :index do
       get 'choice', on: :member
     end
   end
+
+  resources :answers, concerns: :commentable, only: []
 end

@@ -1,4 +1,4 @@
-.box{data: {id: answer.id}}
+.box{data: {answer_id: answer.id}}
   %div.body.answer
     .row
       .col-sm-1
@@ -21,6 +21,8 @@
           - answer.attachments.each do |attachment|
             %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
           %br
+          = render partial: 'comments/list', locals: { comments_parent: answer }
+          %br
           - if current_user && current_user.owns?(answer)
             = link_to edit_question_answer_path(@question, answer), class: 'edit' do
               %i.fa.fa-pencil
@@ -32,3 +34,4 @@
   .row
     .col-sm-offset-1.col-sm-9
       .form{data: {url: edit_question_answer_path(@question, answer)}}
+  = subscribe_to "/answers/#{answer.id}/comments"

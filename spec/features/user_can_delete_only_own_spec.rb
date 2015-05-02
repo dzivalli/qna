@@ -41,11 +41,11 @@ feature 'Deleting only own questions and answers' do
 
     visit question_path(question)
 
-    within "[data-id='#{answer.id}']" do
+    within data_id(answer) do
       page.find('.delete').click
     end
 
-    expect(page).to_not have_selector "[data-id='#{answer.id}']"
+    expect(page).to_not have_selector data_id(answer)
   end
 
   scenario 'Delete someones answer', js: true do
@@ -56,7 +56,7 @@ feature 'Deleting only own questions and answers' do
 
     visit question_path(question)
 
-    within "[data-id='#{answer.id}']" do
+    within data_id(answer) do
       expect(page).to_not have_selector '.delete'
     end
   end
