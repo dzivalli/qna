@@ -7,6 +7,6 @@
       = f.label :body, 'Text'
       = f.text_area :body, class: 'form-control'
     .form-group.file_fields
-      = f.fields_for :attachments do |a|
+      = f.fields_for :attachments, @question.attachments.build do |a|
         = a.file_field :file
     = f.submit 'Submit'

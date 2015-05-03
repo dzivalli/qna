@@ -3,53 +3,41 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_votable, only: [:edit, :update, :destroy, :up, :down]
+  before_action :check_owner, only: [:update, :destroy]
+
+  layout false, only: :edit
+
+  respond_to :html, :js
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @question = Question.includes(:attachments, :comments).find params[:id]
-    @answers = @question.answers.includes(:attachments, :comments).best_first
-    @answer = Answer.new
-    @answer.attachments.build
+    respond_with(@question = Question.includes(:attachments, :comments).find(params[:id]))
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def create
     @question = Question.new question_params.merge(user: current_user)
-    if @question.save
-      PrivatePub.publish_to "/questions", question: @question
-      redirect_to @question, notice: 'Question was created'
-    else
-      flash[:notice] = 'Please, check input data'
-      render 'new'
-    end
+    PrivatePub.publish_to "/questions", question: @question if @question.save
+    respond_with @question
   end
 
   def edit
     @question.attachments.build
-    render layout: false
   end
 
   def update
-    if current_user.owns? @question
-      @question.update question_params
-      @question.attachments.build
-    end
+    @question.update question_params
+    respond_with @question
   end
 
   def destroy
-    if current_user.owns? @question
-      @question.destroy
-      redirect_to questions_path
-    else
-      redirect_to @question
-    end
+    respond_with @question.destroy
   end
 
   private
@@ -60,5 +48,9 @@ class QuestionsController < ApplicationController
 
   def find_votable
     @question = Question.find params[:id]
+  end
+
+  def check_owner
+    not_found unless current_user.owns? @question
   end
 end

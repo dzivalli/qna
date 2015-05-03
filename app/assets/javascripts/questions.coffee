@@ -62,7 +62,6 @@ subscribe_to_new_answers = ->
 
 subscribe_to_new_questions= ->
   PrivatePub.subscribe "/questions", (data, channel) ->
-    debugger
     question = data.question
     question_template = _.template window.templates.question
     $('.list-group').append(question_template(question))
