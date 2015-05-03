@@ -15,6 +15,9 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   controller do
+    before_action :authenticate_user!
+    before_action :find_votable
+
     include Voted
 
     private
