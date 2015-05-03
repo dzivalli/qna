@@ -23,28 +23,15 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when valid parameters' do
       it 'creates a new answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :json }
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }
             .to change(question.answers, :count).by(1)
       end
 
       it 'belongs to user who created it' do
-        post :create, question_id: question, answer: {body: 'www'}, format: :json
+        post :create, question_id: question, answer: {body: 'www'}, format: :js
 
         expect(Answer.find_by_body('www').user).to eq @user
       end
-
-      it 'builds new answer' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :json
-
-        expect(assigns(:answer_new)).to be_a_new(Answer)
-      end
-
-      # now it works via comet
-      # it 'returns json with answer' do
-      #   post :create, question_id: question, answer: {body: 'www'}, format: :json
-      #
-      #   expect(response.body).to  eq(assigns(:answer).to_json(include: :attachments))
-      # end
     end
 
     context 'when invalid parameters' do
@@ -83,7 +70,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when valid parameters' do
       before do
-        patch :update, question_id: question, id: answer, answer: {body: 'aaa'}, format: :json
+        patch :update, question_id: question, id: answer, answer: {body: 'aaa'}, format: :js
 
         answer.reload
       end
@@ -92,33 +79,29 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq 'aaa'
       end
 
-      it 'returns json with answer' do
-        expect(response.body).to eq assigns(:answer).to_json(include: :attachments)
+      it 'renders edit template' do
+        expect(response).to render_template :update
       end
     end
 
     context 'when invalid parameters' do
-      it 'does not update answer' do
-        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :json
+      before { patch :update, question_id: question, id: answer, answer: {body: nil}, format: :js }
 
+      it 'does not update answer' do
         answer.reload
         expect(answer.body).to be_truthy
       end
 
-      it 'answers with 422 status' do
-        patch :update, question_id: question, id: answer, answer: {body: nil}, format: :json
-
-        expect(response).to have_http_status :unprocessable_entity
+      it 'renders edit template' do
+        expect(response).to render_template :update
       end
     end
 
     context 'when answer belongs to someone else' do
-      it 'does not edit answer' do
+      it 'raises an error not found' do
         answer.update user: user2
-        patch :update, question_id: question, id: answer, answer: { body: 'www' }, format: :js
-
-        answer.reload
-        expect(answer.body).to_not eq 'www'
+        expect{ patch :update, question_id: question, id: answer, answer: { body: 'www' }, format: :js }
+            .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -140,10 +123,10 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when delete someone answer' do
-      it 'does not delete answer by id' do
+      it 'raise an error not found' do
         answer
         expect { delete :destroy, question_id: question, id: answer, format: :js }
-            .to_not change(Answer, :count)
+            .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -168,14 +151,11 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when user is not owner' do
-      before { xhr :get, :choice, question_id: question, id: answer, format: :js }
 
       it 'does not update answer on question' do
         answer.reload
         expect(answer.best).to be_falsey
       end
-
-      it { is_expected.to render_template :choice }
     end
   end
 end

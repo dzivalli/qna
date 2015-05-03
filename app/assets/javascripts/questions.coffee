@@ -39,9 +39,9 @@ init = ->
   subscribe_to_new_questions()
 
 
-  $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
-    $(this).closest('.box').replaceWith(generate_answer(answer))
-  .on 'ajax:error', 'form.answer-form',  ajax_error
+#  $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
+#    $(this).closest('.box').replaceWith(generate_answer(answer))
+#  .on 'ajax:error', 'form.answer-form',  ajax_error
 
   $('body').on 'ajax:success', '.score a', (e, votes, status) ->
     $(this).closest('.score').find('.votes').html(votes)

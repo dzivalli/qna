@@ -1,9 +1,9 @@
 class QuestionsController < ApplicationController
-  include Voted
-
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_votable, only: [:edit, :update, :destroy, :up, :down]
   before_action :check_owner, only: [:update, :destroy]
+
+  include Voted
 
   layout false, only: :edit
 
@@ -22,8 +22,8 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new question_params.merge(user: current_user)
-    PrivatePub.publish_to "/questions", question: @question if @question.save
+    @question = Question.create question_params.merge(user: current_user)
+    publish if @question.valid?
     respond_with @question
   end
 
@@ -52,5 +52,8 @@ class QuestionsController < ApplicationController
 
   def check_owner
     not_found unless current_user.owns? @question
+  end
+  def publish
+    PrivatePub.publish_to "/questions", question: @question
   end
 end

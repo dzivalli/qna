@@ -1,47 +1,44 @@
 class AnswersController < ApplicationController
-  include Voted
-
   before_action :authenticate_user!, except: :show
   before_action :find_question
   before_action :find_votable, only: [:edit, :update, :destroy, :choice, :up, :down]
+  before_action :check_owner, only: [:update, :destroy]
+
+  include Voted
+
+  layout false, only: :edit
+
+  respond_to :html, :js
+  respond_to :json, only: :create
 
   def new
-    @answer = Answer.new
+    respond_with(@answer = Answer.new)
   end
 
   def create
-    @answer = Answer.new answer_params.merge(question: @question, user: current_user)
-    if @answer.save
-      @answer_new = Answer.new
-      @answer_new.attachments.build
-      PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json(include: :attachments)
-      render nothing: true
+    @answer = Answer.create answer_params.merge(question: @question, user: current_user)
+    respond_with @question, @answer do |format|
+      format.json { publish if @answer.valid? }
     end
   end
-
 
   def edit
     @answer.attachments.build
-    render layout: false
   end
 
   def update
-    if current_user.owns? @answer
-      if @answer.update answer_params
-        render json: @answer.to_json(include: :attachments)
-      else
-        render json: @answer.errors.full_messages, status: :unprocessable_entity
-      end
-    end
+    @answer.update answer_params
+    respond_with @answer
   end
 
   def destroy
-    @answer.destroy if current_user.owns? @answer
+    respond_with @answer.destroy
   end
 
   def choice
     @answer.best! if current_user.owns? @question
   end
+
 
   private
 
@@ -55,5 +52,13 @@ class AnswersController < ApplicationController
 
   def find_votable
     @answer = Answer.find params[:id]
+  end
+
+  def check_owner
+    not_found unless current_user.owns? @answer
+  end
+
+  def publish
+    PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json(include: :attachments)
   end
 end
