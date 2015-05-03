@@ -5,6 +5,6 @@
       .errors
       = f.text_area :body, class: 'form-control'
     .form-group.file_fields
-      = f.fields_for :attachments do |a|
+      = f.fields_for :attachments, answer.attachments.build do |a|
         = a.file_field :file
     = f.submit 'Submit', class: 'btn btn-default'

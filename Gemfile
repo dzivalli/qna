@@ -41,6 +41,8 @@ gem 'remotipart'
 gem 'underscore-rails'
 gem "private_pub"
 gem "thin"
+gem 'active_model_serializers'
+gem 'responders'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

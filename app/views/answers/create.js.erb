@@ -5,8 +5,8 @@ error_field.html('');
     error_field.html("<p><%= msg %></p>");
   <% end  %>
 <% else %>
-  $('ul.list-group').append("<%= j render @answer %>");
+  $('ul.list-group.answers').append("<%= j render @answer %>");
   $('form#new_answer #answer_body').val('');
-  new_answer_html = $("<%= j render partial: 'form', locals: {answer: @answer_new }%>");
+  new_answer_html = $("<%= j render partial: 'form', locals: {answer: Answer.new }%>");
   $('.box.answer').replaceWith(new_answer_html);
 <% end %>

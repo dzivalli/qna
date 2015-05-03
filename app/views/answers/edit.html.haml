@@ -1,4 +1,4 @@
-= form_for [@question, @answer], html: {class: 'answer-form', remote: true, data: { type: 'json' }} do |f|
+= form_for [@question, @answer], html: {class: 'answer-form', remote: true } do |f|
   .errors
   .form-group
     = f.text_area :body, class: 'form-control'

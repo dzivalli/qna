@@ -13,7 +13,7 @@ feature 'Create question', type: :feature do
 
     expect(page).to have_content 'www'
     expect(page).to have_content 'eee'
-    expect(page).to have_content 'Question was created'
+    expect(page).to have_content 'Question was successfully created'
 
   end
 
@@ -23,6 +23,6 @@ feature 'Create question', type: :feature do
     visit new_question_path
     click_on 'Submit'
 
-    expect(page).to have_content 'Please, check input data'
+    expect(page).to have_content 'Question could not be created'
   end
 end

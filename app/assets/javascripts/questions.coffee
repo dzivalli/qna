@@ -39,9 +39,9 @@ init = ->
   subscribe_to_new_questions()
 
 
-  $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
-    $(this).closest('.box').replaceWith(generate_answer(answer))
-  .on 'ajax:error', 'form.answer-form',  ajax_error
+#  $('.list-group').on 'ajax:success', 'form.answer-form', (e, answer, status) ->
+#    $(this).closest('.box').replaceWith(generate_answer(answer))
+#  .on 'ajax:error', 'form.answer-form',  ajax_error
 
   $('body').on 'ajax:success', '.score a', (e, votes, status) ->
     $(this).closest('.score').find('.votes').html(votes)
@@ -62,7 +62,6 @@ subscribe_to_new_answers = ->
 
 subscribe_to_new_questions= ->
   PrivatePub.subscribe "/questions", (data, channel) ->
-    debugger
     question = data.question
     question_template = _.template window.templates.question
     $('.list-group').append(question_template(question))

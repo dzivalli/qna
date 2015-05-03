@@ -29,10 +29,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it 'builds new answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -129,7 +125,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when invalid params' do
-      let(:question) { create(:question, body: 'aaa', title: 'bbb')}
+      let(:question) { create(:question, user: @user, body: 'aaa', title: 'bbb')}
 
       before do
         patch :update, id: question, question: {body: 'www', title: nil}, format: :js
@@ -150,18 +146,9 @@ RSpec.describe QuestionsController, type: :controller do
       let(:user2) { create(:user) }
       let(:question) { create(:question, user: user2) }
 
-      before do
-        patch :update, id: question, question: {body: 'aaa', title: 'bbb'}, format: :js
-      end
-
-      it 'does not update the question' do
-        question.reload
-        expect(question.body).to_not eq 'aaa'
-        expect(question.title).to_not eq 'bbb'
-      end
-
-      it 're-renders edit view' do
-        expect(response).to render_template :update
+      it 'raises an error not found' do
+        expect { patch :update, id: question, question: {body: 'aaa', title: 'bbb'}, format: :js }
+            .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -188,20 +175,10 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when delete someone question' do
-      let(:user2) { create(:user) }
+      let(:user2) { create(:user, question: question) }
 
-      before do
-        user2.questions << question
-      end
-
-      it 'does not delete question by id' do
-        expect { delete :destroy, id: question }.to_not change(Question, :count)
-      end
-
-      it 'redirects to back' do
-        delete :destroy, id: question
-
-        expect(response).to redirect_to question_path(question)
+      it 'raises an error not found' do
+        expect { delete :destroy, id: question }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
