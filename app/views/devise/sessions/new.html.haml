@@ -15,3 +15,5 @@
   .actions
     = f.submit "Log in"
 = render "devise/shared/links"
+
+= link_to 'via facebook', user_omniauth_authorize_path(:facebook)
