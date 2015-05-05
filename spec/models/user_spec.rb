@@ -79,5 +79,22 @@ RSpec.describe User, type: :model do
         expect{ User.from_omniauth(auth) }.to_not change(user.authentications, :count)
       end
     end
+
+    context 'when hash does not contain email' do
+      let(:user) { create(:user) }
+      let(:authentication) {create(:authentication, user: user, provider: auth[:provider], uid: auth[:uid])}
+
+      before { auth[:info].delete(:email) }
+
+      it 'returns nil if user new' do
+        expect(User.from_omniauth(auth)).to be_falsey
+      end
+
+      it 'returns user if user already has authentication' do
+        authentication
+
+        expect(User.from_omniauth(auth)).to eq user
+      end
+    end
   end
 end

@@ -8,5 +8,6 @@ class CreateAuthentications < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_foreign_key :authentications, :users
+    add_index :authentications, [:provider, :uid]
   end
 end

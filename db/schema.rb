@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20150504161200) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "authentications", ["provider", "uid"], name: "index_authentications_on_provider_and_uid", using: :btree
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
