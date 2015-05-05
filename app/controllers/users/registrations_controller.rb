@@ -24,7 +24,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       if session["omniauth_data"].present? && resource.persisted?
         resource.authentications.create! provider: session["omniauth_data"]['provider'], uid: session["omniauth_data"]['uid']
         sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: session["omniauth_data"]['provider'].capitalize) if is_navigational_format?
+        set_flash_message(:notice, :signed_up) if is_navigational_format?
         session.delete("omniauth_data")
         return
       end
