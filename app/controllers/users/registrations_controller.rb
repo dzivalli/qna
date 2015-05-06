@@ -26,7 +26,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         session.delete("omniauth_data")
       end
 
-      resource.confirm! unless resource.provider?('twitter')
+      resource.confirm! if !resource.provider?('twitter') && resource.valid?
     end
   end
 

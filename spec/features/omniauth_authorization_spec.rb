@@ -15,12 +15,15 @@ feature 'Authorization with omniauth providers' do
 
   context 'when provider is twitter' do
     twitter_mock
+    given(:user) { create :user, email: 'email@email.ru' }
 
-    scenario 'via twitter' do
+    background do
       visit new_user_session_path
       click_on 'via twitter'
-
       fill_in 'Email', with: 'email@email.ru'
+    end
+
+    scenario 'via twitter with new email' do
       click_on 'Sign up'
 
       expect(page).to have_content 'A message with a confirmation link has been sent to your email address.'
@@ -36,6 +39,13 @@ feature 'Authorization with omniauth providers' do
 
       expect(current_path).to eq root_path
       expect(page).to have_content 'Successfully authenticated from Twitter account.'
+    end
+
+    scenario 'via twitter with existed email' do
+      user
+      click_on 'Sign up'
+
+      expect(page).to have_content 'Email has already been taken'
     end
   end
 end
