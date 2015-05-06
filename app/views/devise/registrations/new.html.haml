@@ -5,17 +5,17 @@
     = f.label :email
     %br/
     = f.email_field :email, autofocus: true
-  .field
+  .field{class: ('hide' if @from_omniauth)}
     = f.label :password
     - if @validatable
       %em
         (#{@minimum_password_length} characters minimum)
     %br/
-    = f.password_field :password, autocomplete: "off"
-  .field
+    = f.password_field :password, value: resource.password, autocomplete: "off"
+  .field{class: ('hide' if @from_omniauth)}
     = f.label :password_confirmation
     %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
+    = f.password_field :password_confirmation, value: resource.password_confirmation, autocomplete: "off"
   .actions
     = f.submit "Sign up"
 = render "devise/shared/links"
