@@ -68,4 +68,5 @@ group :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'with_model'
+  gem 'capybara-email'
 end

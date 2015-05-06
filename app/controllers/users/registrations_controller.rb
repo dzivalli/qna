@@ -23,11 +23,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super do |resource|
       if session["omniauth_data"].present? && resource.persisted?
         resource.authentications.create! provider: session["omniauth_data"]['provider'], uid: session["omniauth_data"]['uid']
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :signed_up) if is_navigational_format?
         session.delete("omniauth_data")
-        return
       end
+
+      resource.confirm! unless resource.provider?('twitter')
     end
   end
 

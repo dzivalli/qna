@@ -97,4 +97,17 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '.provider?' do
+    let(:user) { create(:user) }
+    it 'returns true if oauth provider exist' do
+      user.authentications.create! provider: 'twitter', uid: '12313'
+
+      expect(user.provider?('twitter')).to be_truthy
+    end
+
+    it 'returns false it not' do
+      expect(user.provider?('twitter')).to be_falsey
+    end
+  end
 end

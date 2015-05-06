@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :omniauth_providers => [:facebook, :twitter]
 
@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
     if auth[:info][:email].present?
       user = find_or_create_by(email: auth[:info][:email]) do |u|
         u.password = Devise.friendly_token
+        u.confirmed_at = Date.today
       end
 
       user.authentications.find_or_create_by(provider: auth[:provider], uid: auth[:uid])
@@ -24,5 +25,9 @@ class User < ActiveRecord::Base
     else
       Authentication.find_by(provider: auth[:provider], uid: auth[:uid]).try(:user)
     end
+  end
+
+  def provider?(provider)
+    authentications.where(provider: provider).any?
   end
 end
