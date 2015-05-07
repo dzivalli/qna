@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_votable, only: [:edit, :update, :destroy, :up, :down]
-  before_action :check_owner, only: [:update, :destroy]
+  before_action :check_authorization, only: [:update, :destroy]
 
   include Voted
 
@@ -23,6 +23,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.create question_params.merge(user: current_user)
+    authorize @question
     publish if @question.valid?
     respond_with @question
   end
@@ -50,9 +51,10 @@ class QuestionsController < ApplicationController
     @question = Question.find params[:id]
   end
 
-  def check_owner
-    not_found unless current_user.owns? @question
+  def check_authorization
+    authorize @question
   end
+
   def publish
     PrivatePub.publish_to "/questions", question: @question
   end

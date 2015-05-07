@@ -10,6 +10,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment_decorator = CommentDecorator.new(@commentable.comments.create comment_params)
+    authorize @comment_decorator.comment
     respond_with @comment_decotator if @comment_decorator.valid?
   end
 
@@ -20,7 +21,7 @@ class CommentsController < ApplicationController
     if params["#{klass}_id"].present?
       @commentable = klass.classify.safe_constantize.try :find_by_id, params["#{klass}_id"]
     else
-      not_found
+      not_authorized
     end
   end
 

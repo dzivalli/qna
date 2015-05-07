@@ -98,10 +98,11 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when answer belongs to someone else' do
-      it 'raises an error not found' do
+      it 'returns an error' do
         answer.update user: user2
-        expect{ patch :update, question_id: question, id: answer, answer: { body: 'www' }, format: :js }
-            .to raise_error(ActiveRecord::RecordNotFound)
+        patch :update, question_id: question, id: answer, answer: { body: 'www' }, format: :js
+
+        expect(response).to have_http_status :unauthorized
       end
     end
   end
@@ -122,11 +123,12 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'when delete someone answer' do
-      it 'raise an error not found' do
+    context 'returns an error' do
+      it 'renders an error' do
         answer
-        expect { delete :destroy, question_id: question, id: answer, format: :js }
-            .to raise_error(ActiveRecord::RecordNotFound)
+        delete :destroy, question_id: question, id: answer, format: :js
+
+        expect(response).to have_http_status :unauthorized
       end
     end
   end

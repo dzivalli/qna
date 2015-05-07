@@ -196,6 +196,8 @@ GEM
     pg (0.18.1)
     private_pub (1.0.3)
       faye
+    pundit (1.0.0)
+      activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.0)
@@ -326,6 +328,7 @@ DEPENDENCIES
   omniauth-twitter
   pg
   private_pub
+  pundit
   quiet_assets
   rails (= 4.2.0)
   remotipart

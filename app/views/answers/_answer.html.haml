@@ -23,12 +23,13 @@
           %br
           = render partial: 'comments/list', locals: { comments_parent: answer }
           %br
-          - if current_user && current_user.owns?(answer)
+          - if policy(answer).edit?
             = link_to edit_question_answer_path(@question, answer), class: 'edit' do
               %i.fa.fa-pencil
+          - if policy(answer).destroy?
             = link_to question_answer_path(@question, answer), method: :delete, remote: true, class: 'delete' do
               %i.fa.fa-trash
-          - if current_user && current_user.owns?(@question)
+          - if policy(answer).choice?
             = link_to choice_question_answer_path(@question, answer), remote: true, class: 'best' do
               %i.fa.fa-thumbs-o-up
   .row
