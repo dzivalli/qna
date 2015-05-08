@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :find_question
   before_action :find_votable, only: [:edit, :update, :destroy, :choice, :up, :down]
-  before_action :check_authorization, only: [:update, :destroy]
+  before_action :check_authorization, only: [:create, :update, :destroy]
 
   include Voted
 
@@ -17,7 +17,6 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.create answer_params.merge(question: @question, user: current_user)
-    authorize @answer
     respond_with @question, @answer do |format|
       format.json { publish if @answer.valid? }
     end
@@ -56,7 +55,7 @@ class AnswersController < ApplicationController
   end
 
   def check_authorization
-    authorize @answer
+    authorize @answer || :answers
   end
 
   def publish

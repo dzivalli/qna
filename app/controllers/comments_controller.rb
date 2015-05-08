@@ -9,8 +9,8 @@ class CommentsController < ApplicationController
   end
 
   def create
+    authorize :comments
     @comment_decorator = CommentDecorator.new(@commentable.comments.create comment_params)
-    authorize @comment_decorator.comment
     respond_with @comment_decotator if @comment_decorator.valid?
   end
 

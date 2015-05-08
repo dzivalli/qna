@@ -15,6 +15,6 @@ class ApplicationController < ActionController::Base
 
   def not_authorized
     # redirect_to root_path, alert: 'Not authorized' && return unless request.xhr?
-    render json: nil, status: :unauthorized
+    render nothing: true, status: :unauthorized
   end
 end

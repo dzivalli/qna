@@ -11,6 +11,10 @@ RSpec.describe ApplicationController, type: :controller do
       model do
         include Votable
         belongs_to :user
+
+        def self.policy_class
+          QuestionPolicy
+        end
       end
   end
 
