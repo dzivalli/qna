@@ -146,9 +146,10 @@ RSpec.describe QuestionsController, type: :controller do
       let(:user2) { create(:user) }
       let(:question) { create(:question, user: user2) }
 
-      it 'raises an error not found' do
-        expect { patch :update, id: question, question: {body: 'aaa', title: 'bbb'}, format: :js }
-            .to raise_error(ActiveRecord::RecordNotFound)
+      it 'returns an error' do
+        patch :update, id: question, question: {body: 'aaa', title: 'bbb'}, format: :js
+
+        expect(response).to have_http_status :unauthorized
       end
     end
   end
@@ -177,8 +178,10 @@ RSpec.describe QuestionsController, type: :controller do
     context 'when delete someone question' do
       let(:user2) { create(:user, question: question) }
 
-      it 'raises an error not found' do
-        expect { delete :destroy, id: question }.to raise_error(ActiveRecord::RecordNotFound)
+      it 'returns an error' do
+        delete :destroy, id: question
+
+        expect(response).to have_http_status :unauthorized
       end
     end
   end

@@ -16,9 +16,10 @@
         .panel-title
           = @question.title
           .pull-right
-            - if current_user && current_user.owns?(@question)
+            - if policy(@question).edit?
               = link_to edit_question_path(@question), class: 'edit' do
                 %i.fa.fa-pencil
+            -  if policy(@question).destroy?
               = link_to question_path(@question), method: :delete, class: 'delete' do
                 %i.fa.fa-trash
       .panel-body

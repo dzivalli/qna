@@ -6,6 +6,7 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'with_model'
 require 'capybara/email/rspec'
+require "pundit/rspec"
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

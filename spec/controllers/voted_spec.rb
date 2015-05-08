@@ -11,6 +11,10 @@ RSpec.describe ApplicationController, type: :controller do
       model do
         include Votable
         belongs_to :user
+
+        def self.policy_class
+          QuestionPolicy
+        end
       end
   end
 
@@ -67,18 +71,11 @@ RSpec.describe ApplicationController, type: :controller do
     context 'when user is owner' do
       log_in
 
-      before do
+      it 'returns an error', format: :json do
         votable.update user: @user
         xhr :get, :up, id: votable
-        votable.reload
-      end
 
-      it 'does not change vote counter', format: :json do
-        expect(votable.votes).to eq 0
-      end
-
-      it 'returns status 403' do
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :unauthorized
       end
     end
 
@@ -139,18 +136,11 @@ RSpec.describe ApplicationController, type: :controller do
     context 'when user is owner' do
       log_in
 
-      before do
+      it 'returns an error', format: :json do
         votable.update user: @user
         xhr :get, :down, id: votable
-        votable.reload
-      end
 
-      it 'does not change vote counter', format: :json do
-        expect(votable.votes).to eq 0
-      end
-
-      it 'returns status 403' do
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :unauthorized
       end
     end
 

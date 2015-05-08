@@ -15,7 +15,8 @@ module Voted
 
   def vote
     votable = instance_variable_get "@#{controller_name.singularize}"
-    if current_user.owns?(votable) || votable.check_vote?(current_user, action_name)
+    authorize votable
+    if votable.check_vote?(current_user, action_name)
       render json: votable.votes, status: :forbidden
     else
       votable.vote! current_user, action_name
