@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   has_many :answers
   has_many :authentications, dependent: :destroy
 
+  scope :except_of, -> (user) { where.not(id: user) }
+
   def owns?(obj)
     obj.respond_to?(:user_id) && obj.user_id == id
   end

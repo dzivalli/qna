@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: { sessions: "users/sessions",
                                     registrations: "users/registrations",
                                     omniauth_callbacks: "users/omniauth_callbacks" }
@@ -23,4 +24,15 @@ Rails.application.routes.draw do
   end
 
   resources :answers, concerns: :commentable, only: []
+
+  # scope module: 'api', constraints: 'api' do
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        collection do
+          get :me
+        end
+      end
+    end
+  end
 end
