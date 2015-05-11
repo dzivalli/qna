@@ -35,15 +35,15 @@ describe 'Profile API' do
     end
   end
 
-  describe 'GET /others' do
+  describe 'GET /index' do
     context 'when user is unauthenticated' do
       it 'returns unauthorized error without access token' do
-        get '/api/v1/profiles/others', format: :json
+        get '/api/v1/profiles', format: :json
         expect(response).to have_http_status :unauthorized
       end
 
       it 'returns unauthorized error with invalid access token' do
-        get '/api/v1/profiles/others', access_token: '12412', format: :json
+        get '/api/v1/profiles', access_token: '12412', format: :json
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -53,7 +53,7 @@ describe 'Profile API' do
       let(:access_token) { create :oauth_access_token, resource_owner_id: me.id }
       let!(:others) { create_list :user, 2 }
 
-      before { get '/api/v1/profiles/others', format: :json, access_token: access_token.token }
+      before { get '/api/v1/profiles', format: :json, access_token: access_token.token }
 
       it 'returns success' do
         expect(response).to have_http_status :success

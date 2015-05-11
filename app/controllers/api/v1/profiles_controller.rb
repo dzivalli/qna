@@ -7,7 +7,7 @@ class Api::V1::ProfilesController < ApplicationController
     respond_with @owner
   end
 
-  def others
+  def index
     respond_with User.except_of(@owner)
   end
 
