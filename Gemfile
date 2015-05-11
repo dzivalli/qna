@@ -71,4 +71,5 @@ group :test do
   gem 'database_cleaner'
   gem 'with_model'
   gem 'capybara-email'
+  gem 'json_spec'
 end
