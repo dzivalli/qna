@@ -7,6 +7,10 @@ class Api::V1::ProfilesController < ApplicationController
     respond_with @owner
   end
 
+  def others
+    respond_with User.except_of(@owner)
+  end
+
   private
 
   def find_resource_owner
