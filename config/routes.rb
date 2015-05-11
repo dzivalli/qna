@@ -24,4 +24,13 @@ Rails.application.routes.draw do
   end
 
   resources :answers, concerns: :commentable, only: []
+
+  # scope module: 'api', constraints: 'api' do
+  namespace :api do
+    namespace :v1 do
+      resources :profiles do
+        get 'me', on: :collection
+      end
+    end
+  end
 end
