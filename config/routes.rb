@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   # scope module: 'api', constraints: 'api' do
   namespace :api do
     namespace :v1 do
-      resources :questions, only: [:index, :show] do
+      resources :questions, only: [:index, :show, :create] do
         resources :answers, only: [:index, :show]
       end
       resources :profiles, only: :index do

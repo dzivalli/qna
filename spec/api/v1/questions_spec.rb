@@ -82,4 +82,41 @@ describe 'Questions API' do
       end
     end
   end
+
+  describe 'POST #create' do
+    context 'when user is unauthenticated' do
+      it 'returns unauthorized error without access token' do
+        post '/api/v1/questions', question: attributes_for(:question), format: :json
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'returns unauthorized error with invalid access token' do
+        post '/api/v1/questions', question: attributes_for(:question), format: :json, access_token: 'sdfsfs'
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when user is authenticated' do
+      let(:access_token) { create :oauth_access_token }
+
+      it 'returns success' do
+        post '/api/v1/questions', question: attributes_for(:question), access_token: access_token.token, format: :json
+        expect(response).to have_http_status :success
+      end
+
+      it 'creates new question' do
+        expect {
+          post '/api/v1/questions', question: attributes_for(:question), access_token: access_token.token, format: :json
+        }.to change(Question, :count).by 1
+      end
+
+      it 'creates question with correct attributes' do
+        post '/api/v1/questions', question: { title: '111', body: '222' }, access_token: access_token.token, format: :json
+
+        expect(response.body).to be_json_eql({title: '111', body: '222', votes: 0}.to_json)
+                                     .excluding('answers', 'attachments', 'comments').at_path('question')
+      end
+    end
+
+  end
 end
