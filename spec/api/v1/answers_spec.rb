@@ -85,4 +85,43 @@ describe 'Answers API' do
       end
     end
   end
+
+  describe 'POST #create' do
+    let!(:question) { create :question }
+
+    context 'when user is unauthenticated' do
+      it 'returns unauthorized error without access token' do
+        post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), format: :json
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'returns unauthorized error with invalid access token' do
+        post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), format: :json, access_token: 'sdfsfs'
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when user is authenticated' do
+      let(:access_token) { create :oauth_access_token }
+
+      it 'returns success' do
+        post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), access_token: access_token.token, format: :json
+        expect(response).to have_http_status :success
+      end
+
+      it 'creates new question' do
+        expect {
+          post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), access_token: access_token.token, format: :json
+        }.to change(Answer, :count).by 1
+      end
+
+      it 'creates question with correct attributes' do
+        post "/api/v1/questions/#{question.id}/answers/", answer: { body: '222' }, access_token: access_token.token, format: :json
+
+        expect(response.body).to be_json_eql({body: '222'}.to_json)
+                                     .excluding('attachments', 'comments').at_path('answer')
+      end
+    end
+
+  end
 end
