@@ -8,7 +8,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def create
-    @question = Question.create question_params
+    @question = Question.create question_params.merge(user: @owner)
     respond_with @question
   end
 

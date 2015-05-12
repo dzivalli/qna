@@ -1,5 +1,5 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-  before_action :find_question
+  before_action :find_question, except: :show
 
   def index
     respond_with(@answers = @question.answers)
@@ -10,7 +10,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def create
-    @answer = Answer.create answer_params
+    @answer = @question.answers.create answer_params.merge(user: @owner)
     respond_with @question, @answer
   end
 

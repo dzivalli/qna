@@ -10,7 +10,7 @@ describe 'Questions API' do
       before { get '/api/v1/questions', access_token: access_token.token, format: :json  }
 
       it 'returns success' do
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       it { is_expected.to have_json_size(2).at_path('questions')}
@@ -57,7 +57,7 @@ describe 'Questions API' do
       before { get "/api/v1/questions/#{question.id}", access_token: access_token.token, format: :json  }
 
       it 'returns success' do
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       %w(id title body created_at votes).each do |attr|
@@ -97,11 +97,12 @@ describe 'Questions API' do
     end
 
     context 'when user is authenticated' do
-      let(:access_token) { create :oauth_access_token }
+      let(:user) { create :user }
+      let(:access_token) { create :oauth_access_token, resource_owner_id: user.id }
 
       it 'returns success' do
         post '/api/v1/questions', question: attributes_for(:question), access_token: access_token.token, format: :json
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       it 'creates new question' do
@@ -115,6 +116,11 @@ describe 'Questions API' do
 
         expect(response.body).to be_json_eql({title: '111', body: '222', votes: 0}.to_json)
                                      .excluding('answers', 'attachments', 'comments').at_path('question')
+      end
+
+      it 'belongs to user' do
+        post '/api/v1/questions', question: attributes_for(:question), access_token: access_token.token, format: :json
+        expect(assigns(:question).user).to eq user
       end
     end
 

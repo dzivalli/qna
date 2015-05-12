@@ -24,7 +24,7 @@ describe 'Answers API' do
       before { get "/api/v1/questions/#{question.id}/answers", access_token: access_token.token, format: :json  }
 
       it 'returns success' do
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       it { is_expected.to have_json_size(2).at_path('answers')}
@@ -41,12 +41,12 @@ describe 'Answers API' do
 
     context 'when user is unauthenticated' do
       it 'returns unauthorized error without access token' do
-        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", format: :json
+        get "/api/v1/answers/#{answer.id}", format: :json
         expect(response).to have_http_status :unauthorized
       end
 
       it 'returns unauthorized error with invalid access token' do
-        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", format: :json, access_token: 'sdfsfs'
+        get "/api/v1/answers/#{answer.id}", format: :json, access_token: 'sdfsfs'
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -57,10 +57,10 @@ describe 'Answers API' do
       let!(:attachment) { create :attachment, attachable: answer }
       subject { response.body }
 
-      before { get "/api/v1/questions/#{question.id}/answers/#{answer.id}", access_token: access_token.token, format: :json }
+      before { get "/api/v1/answers/#{answer.id}", access_token: access_token.token, format: :json }
 
       it 'returns success' do
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       %w(id body created_at).each do |attr|
@@ -102,24 +102,30 @@ describe 'Answers API' do
     end
 
     context 'when user is authenticated' do
-      let(:access_token) { create :oauth_access_token }
+      let(:user) { create :user }
+      let(:access_token) { create :oauth_access_token, resource_owner_id: user.id }
 
       it 'returns success' do
         post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), access_token: access_token.token, format: :json
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
-      it 'creates new question' do
+      it 'creates new answer' do
         expect {
           post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), access_token: access_token.token, format: :json
-        }.to change(Answer, :count).by 1
+        }.to change(question.answers, :count).by 1
       end
 
-      it 'creates question with correct attributes' do
+      it 'creates answer with correct attributes' do
         post "/api/v1/questions/#{question.id}/answers/", answer: { body: '222' }, access_token: access_token.token, format: :json
 
         expect(response.body).to be_json_eql({body: '222'}.to_json)
                                      .excluding('attachments', 'comments').at_path('answer')
+      end
+
+      it 'belongs to user' do
+        post "/api/v1/questions/#{question.id}/answers/", answer: attributes_for(:answer), access_token: access_token.token, format: :json
+        expect(assigns(:answer).user).to eq user
       end
     end
 
