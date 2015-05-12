@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   # scope module: 'api', constraints: 'api' do
   namespace :api do
     namespace :v1 do
+      resources :questions
       resources :profiles, only: :index do
         collection do
           get :me
