@@ -10,7 +10,7 @@ describe 'Profile API' do
       before { get '/api/v1/profiles/me', access_token: access_token.token, format: :json  }
 
       it 'returns success' do
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       %w(id email).each do |attr|
@@ -56,7 +56,7 @@ describe 'Profile API' do
       before { get '/api/v1/profiles', format: :json, access_token: access_token.token }
 
       it 'returns success' do
-        expect(response).to have_http_status :success
+        expect(response).to be_success
       end
 
       %w(id email).each do |attr|
