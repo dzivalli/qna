@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe 'Questions API' do
   describe 'GET #index' do
+    it_behaves_like 'unauthenticated'
+
     context 'when user is authenticated' do
       let(:access_token) { create :oauth_access_token }
       let!(:questions) { create_list :question, 2 }
@@ -20,33 +22,15 @@ describe 'Questions API' do
       end
     end
 
-    context 'when user is unauthenticated' do
-      it 'returns unauthorized error without access token' do
-        get '/api/v1/questions', format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized error with invalid access token' do
-        get '/api/v1/questions', format: :json, access_token: 'sdfsfs'
-        expect(response).to have_http_status :unauthorized
-      end
+    def do_request(params = {})
+      get '/api/v1/questions', {format: :json}.merge(params)
     end
   end
 
   describe 'GET #show' do
     let!(:question) { create :question }
 
-    context 'when user is unauthenticated' do
-      it 'returns unauthorized error without access token' do
-        get "/api/v1/questions/#{question.id}", format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized error with invalid access token' do
-        get "/api/v1/questions/#{question.id}", format: :json, access_token: 'sdfsfs'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'unauthenticated'
 
     context 'when user is authenticated' do
       let(:access_token) { create :oauth_access_token }
@@ -81,20 +65,14 @@ describe 'Questions API' do
         end
       end
     end
+
+    def do_request(params = {})
+      get "/api/v1/questions/#{question.id}", {format: :json}.merge(params)
+    end
   end
 
   describe 'POST #create' do
-    context 'when user is unauthenticated' do
-      it 'returns unauthorized error without access token' do
-        post '/api/v1/questions', question: attributes_for(:question), format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized error with invalid access token' do
-        post '/api/v1/questions', question: attributes_for(:question), format: :json, access_token: 'sdfsfs'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'unauthenticated'
 
     context 'when user is authenticated' do
       let(:user) { create :user }
@@ -124,5 +102,8 @@ describe 'Questions API' do
       end
     end
 
+    def do_request(params = {})
+      post '/api/v1/questions', {question: attributes_for(:question), format: :json}.merge(params)
+    end
   end
 end
