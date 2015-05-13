@@ -18,7 +18,10 @@ class AnswersController < ApplicationController
   def create
     @answer = Answer.create answer_params.merge(question: @question, user: current_user)
     respond_with @question, @answer do |format|
-      format.json { publish if @answer.valid? }
+      format.json do
+        publish if @answer.valid?
+        render nothing: true
+      end
     end
   end
 

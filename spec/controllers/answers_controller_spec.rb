@@ -32,6 +32,19 @@ RSpec.describe AnswersController, type: :controller do
 
         expect(Answer.find_by_body('www').user).to eq @user
       end
+
+      it 'renders create template if format js' do
+        post :create, question_id: question, answer: {body: 'www'}, format: :js
+
+        expect(response).to render_template :create
+      end
+
+
+      it 'publish answer to public_pub if format is json' do
+        allow(PrivatePub).to receive(:publish_to).with("/questions/#{question.id}/answers", any_args)
+
+        post :create, question_id: question, answer: {body: 'www'}, format: :json
+      end
     end
 
     context 'when invalid parameters' do
@@ -39,12 +52,6 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, question_id: question, answer: {body: nil}, format: :js }
             .to_not change(Answer, :count)
       end
-
-      # it 'answers with status 422' do
-      #   post :create, question_id: question, answer: {body: nil}, format: :json
-      #
-      #   expect(response).to have_http_status 422
-      # end
     end
   end
 
