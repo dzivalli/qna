@@ -9,9 +9,7 @@ describe 'Profile API' do
 
       before { get '/api/v1/profiles/me', access_token: access_token.token, format: :json  }
 
-      it 'returns success' do
-        expect(response).to be_success
-      end
+      it_behaves_like 'successful'
 
       %w(id email).each do |attr|
         it { is_expected.to be_json_eql(me.send(attr).to_json).at_path(attr)}
@@ -55,9 +53,7 @@ describe 'Profile API' do
 
       before { get '/api/v1/profiles', format: :json, access_token: access_token.token }
 
-      it 'returns success' do
-        expect(response).to be_success
-      end
+      it_behaves_like 'successful'
 
       %w(id email).each do |attr|
         it "contains #{attr}" do

@@ -11,9 +11,7 @@ describe 'Questions API' do
 
       before { get '/api/v1/questions', access_token: access_token.token, format: :json  }
 
-      it 'returns success' do
-        expect(response).to be_success
-      end
+      it_behaves_like 'successful'
 
       it { is_expected.to have_json_size(2).at_path('questions')}
 
@@ -40,9 +38,7 @@ describe 'Questions API' do
 
       before { get "/api/v1/questions/#{question.id}", access_token: access_token.token, format: :json  }
 
-      it 'returns success' do
-        expect(response).to be_success
-      end
+      it_behaves_like 'successful'
 
       %w(id title body created_at votes).each do |attr|
         it { is_expected.to be_json_eql(question.send(attr).to_json).at_path("question/#{attr}")}
