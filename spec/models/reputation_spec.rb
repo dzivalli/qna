@@ -8,11 +8,11 @@ RSpec.describe Reputation do
       controller = 'questions'
 
       it 'update user reputation by 2 if action .up' do
-        expect { Reputation.calculate([user, controller, 'up']) }.to change(user, :reputation).by 2
+        expect { Reputation.calculate(user, [controller, 'up']) }.to change(user, :reputation).by 2
       end
 
       it 'update user reputation by -2 if action .down' do
-        expect { Reputation.calculate([user, controller, 'down']) }.to change(user, :reputation).by -2
+        expect { Reputation.calculate(user, [controller, 'down']) }.to change(user, :reputation).by -2
       end
     end
 
@@ -20,15 +20,15 @@ RSpec.describe Reputation do
       controller = 'answers'
 
       it 'update user reputation by 1 if action .up' do
-        expect { Reputation.calculate([user, controller, 'up']) }.to change(user, :reputation).by 1
+        expect { Reputation.calculate(user, [controller, 'up']) }.to change(user, :reputation).by 1
       end
 
       it 'update user reputation by -1 if action .down' do
-        expect { Reputation.calculate([user, controller, 'down']) }.to change(user, :reputation).by -1
+        expect { Reputation.calculate(user, [controller, 'down']) }.to change(user, :reputation).by -1
       end
 
       it 'update user reputation by 3 if action .choice' do
-        expect { Reputation.calculate([user, controller, 'choice']) }.to change(user, :reputation).by 3
+        expect { Reputation.calculate(user, [controller, 'choice']) }.to change(user, :reputation).by 3
       end
 
       context 'when action .create with additional conditions' do
@@ -39,19 +39,19 @@ RSpec.describe Reputation do
           create(:answer, question: question)
           answer
 
-          expect { Reputation.calculate([user, controller, 'create']) }.to change(user, :reputation).by 1
+          expect { Reputation.calculate(user, [controller, 'create']) }.to change(user, :reputation).by 1
         end
 
         it 'updates reputation by 1 + 1 if user is first' do
           answer
-          expect { Reputation.calculate([user, controller, 'create']) }.to change(user, :reputation).by 2
+          expect { Reputation.calculate(user, [controller, 'create']) }.to change(user, :reputation).by 2
         end
 
         it 'updates reputation by 1 + 3 if user is first and he is question owner' do
           answer
           user.questions << question
 
-          expect { Reputation.calculate([user, controller, 'create']) }.to change(user, :reputation).by 4
+          expect { Reputation.calculate(user, [controller, 'create']) }.to change(user, :reputation).by 4
         end
 
         it 'updates reputation by 1 + 2 if user isnt first but he is question owner' do
@@ -59,7 +59,7 @@ RSpec.describe Reputation do
           create(:answer, question: question)
           answer
 
-          expect { Reputation.calculate([user, controller, 'create']) }.to change(user, :reputation).by 3
+          expect { Reputation.calculate(user, [controller, 'create']) }.to change(user, :reputation).by 3
         end
       end
     end

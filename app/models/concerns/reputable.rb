@@ -2,13 +2,13 @@ module Reputable
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :temp_data
+    attr_accessor :controller_data
     after_save :update_reputation
   end
 
   private
 
   def update_reputation
-    Reputation.calculate(temp_data) if temp_data
+    Reputation.calculate(user, controller_data) if controller_data
   end
 end

@@ -17,9 +17,8 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.create answer_params.merge(question: @question,
-                                                user: current_user,
-                                                temp_data: [current_user, controller_name, action_name])
+    @answer = @question.answers.create answer_params.merge( user: current_user,
+                                                            controller_data: [controller_name, action_name])
     respond_with @question, @answer do |format|
       format.json do
         publish if @answer.valid?
