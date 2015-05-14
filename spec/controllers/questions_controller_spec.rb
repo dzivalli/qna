@@ -70,6 +70,12 @@ RSpec.describe QuestionsController, type: :controller do
 
         expect(response).to redirect_to question_path(assigns(:question))
       end
+
+      it 'publish question to public_pub' do
+        expect(PrivatePub).to receive(:publish_to).with('/questions', question: kind_of(Question))
+
+        post :create, question: attributes_for(:question)
+      end
     end
 
     context 'when invalid params' do

@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
   before_action :check_authorization, only: [:create, :update, :destroy]
 
   include Voted
+  include Reputated
 
   layout false, only: :edit
 
@@ -16,9 +17,13 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.create answer_params.merge(question: @question, user: current_user)
+    @answer = @question.answers.create answer_params.merge( user: current_user,
+                                                            controller_data: [controller_name, action_name])
     respond_with @question, @answer do |format|
-      format.json { publish if @answer.valid? }
+      format.json do
+        publish if @answer.valid?
+        render nothing: true
+      end
     end
   end
 
