@@ -2,7 +2,7 @@ module Reputated
   extend ActiveSupport::Concern
 
   included do
-    before_action :save_temp_data, only: [:update, :create, :up, :down]
+    before_action :save_temp_data, only: [:up, :down, :choice]
   end
 
   private
