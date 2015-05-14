@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
   before_action :check_authorization, only: [:create, :update, :destroy]
 
   include Voted
+  include Reputated
 
   layout false, only: :edit
 
