@@ -2,6 +2,7 @@ class Answer < ActiveRecord::Base
   include Votable
   include Attachable
   include Commentable
+  include Reputable
 
   belongs_to :question
   belongs_to :user
