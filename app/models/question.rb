@@ -12,4 +12,8 @@ class Question < ActiveRecord::Base
   validates :body, presence: true
 
   scope :for_last_day, -> { where(created_at: (Time.now.midnight - 1.day)..Time.now.midnight) }
+
+  def notification_of(user)
+    notifications.find_by(user: user)
+  end
 end
