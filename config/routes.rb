@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: [:votable, :commentable] do
+    resources :notifications, only: [:create, :destroy]
     resources :answers, concerns: :votable, except: :index do
       get 'choice', on: :member
     end
