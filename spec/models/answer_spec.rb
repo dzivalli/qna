@@ -5,6 +5,11 @@ RSpec.describe Answer, type: :model do
   it { is_expected.to belong_to :question }
   it { is_expected.to validate_presence_of :body }
 
+  it_behaves_like 'attachable'
+  it_behaves_like 'votable'
+  it_behaves_like 'commentable'
+  it_behaves_like 'reputable'
+
   describe '#best!' do
     let(:question) { create(:question) }
     let!(:answers) { create_list(:answer, 3, question: question, best: true) }
@@ -24,14 +29,22 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  it_behaves_like 'attachable'
-  it_behaves_like 'votable'
-  it_behaves_like 'commentable'
-  it_behaves_like 'reputable'
+  describe 'notification' do
+    let!(:user) { create :user }
+    let!(:question) { create :question, user: user}
 
-  it 'sends email notification' do
-    expect(UserMailer).to receive(:answer_notification).and_call_original
+    let!(:others) { create_list :user, 2 }
+    let!(:notification1) { create :notification, user: others[0], question: question }
+    let!(:notification2) { create :notification, user: others[1], question: question }
 
-    create :answer
+    it 'sends email to owner and subscribed users' do
+      expect(UserMailer).to receive(:answer_notification).with(kind_of(Answer), user.email).and_call_original
+
+      others.each do |other|
+        expect(UserMailer).to receive(:answer_notification).with(kind_of(Answer), other.email).and_call_original
+      end
+
+      create :answer, question: question
+    end
   end
 end

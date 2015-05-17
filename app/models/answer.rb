@@ -11,7 +11,8 @@ class Answer < ActiveRecord::Base
 
   scope :best_first, -> { order(best: :desc) }
 
-  after_create :send_notification
+  after_create :notification_to_question_owner
+  after_create :notification_to_described_users
 
   def best!
     question.answers.update_all best: false
@@ -20,7 +21,13 @@ class Answer < ActiveRecord::Base
 
   private
 
-  def send_notification
-    UserMailer.answer_notification(self).deliver_later
+  def notification_to_question_owner
+    UserMailer.answer_notification(self, question.user.email).deliver_later
+  end
+
+  def notification_to_described_users
+    question.notifications.each do |notifications|
+      UserMailer.answer_notification(self, notifications.user.email).deliver_later
+    end
   end
 end

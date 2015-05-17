@@ -5,8 +5,7 @@ class UserMailer < ApplicationMailer
     mail(to: user.email, subject: 'Daily digest')
   end
 
-  def answer_notification(answer)
-    email = answer.question.user.email
+  def answer_notification(answer, email)
     @answer = answer
     mail(to: email, subject: 'New answer')
   end

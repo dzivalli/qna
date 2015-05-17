@@ -8,11 +8,11 @@ RSpec.describe UserMailer, type: :mailer do
     let(:answer) { create :answer, question: question }
 
     it 'sends email' do
-      expect { UserMailer.answer_notification(answer).deliver_now }.to change(ActionMailer::Base.deliveries, :count).by 1
+      expect { UserMailer.answer_notification(answer, user.email).deliver_now }.to change(ActionMailer::Base.deliveries, :count).by 1
     end
 
     it 'contains answer body' do
-      email = UserMailer.answer_notification(answer)
+      email = UserMailer.answer_notification(answer, user.email)
 
       expect(email).to have_content answer.body
     end
