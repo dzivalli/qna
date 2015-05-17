@@ -28,4 +28,10 @@ RSpec.describe Answer, type: :model do
   it_behaves_like 'votable'
   it_behaves_like 'commentable'
   it_behaves_like 'reputable'
+
+  it 'sends email notification' do
+    expect(UserMailer).to receive(:answer_notification).and_call_original
+
+    create :answer
+  end
 end

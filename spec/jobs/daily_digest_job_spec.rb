@@ -8,6 +8,6 @@ RSpec.describe DailyDigestJob, type: :job do
       expect(UserMailer).to receive(:digest).and_call_original
     end
 
-    DailyDigestJob.perform_later
+    DailyDigestJob.perform_now
   end
 end
