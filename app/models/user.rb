@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :questions
   has_many :answers
   has_many :authentications, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   scope :except_of, -> (user) { where.not(id: user) }
 

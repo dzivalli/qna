@@ -5,6 +5,7 @@ class Question < ActiveRecord::Base
   include Reputable
 
   has_many :answers, dependent: :destroy
+  has_many :notifications, dependent: :destroy
   belongs_to :user
 
   validates :title, presence: true
