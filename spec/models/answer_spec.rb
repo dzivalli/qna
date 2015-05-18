@@ -2,8 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
 
-  it { is_expected.to belong_to :question}
+  it { is_expected.to belong_to :question }
   it { is_expected.to validate_presence_of :body }
+
+  it_behaves_like 'attachable'
+  it_behaves_like 'votable'
+  it_behaves_like 'commentable'
+  it_behaves_like 'reputable'
 
   describe '#best!' do
     let(:question) { create(:question) }
@@ -24,8 +29,15 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  it_behaves_like 'attachable'
-  it_behaves_like 'votable'
-  it_behaves_like 'commentable'
-  it_behaves_like 'reputable'
+  describe 'notification' do
+    let!(:user) { create :user }
+    let!(:question) { create :question, user: user}
+
+    it 'sends email to owner and subscribed users' do
+      expect(UserMailer).to receive(:answer_notification).with(kind_of(Answer), user.email).and_call_original
+      expect(NotifySubscribedUsersJob).to receive(:perform_later).with(kind_of(Answer))
+
+      create :answer, question: question
+    end
+  end
 end

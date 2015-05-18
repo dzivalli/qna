@@ -29,4 +29,12 @@
           %p= link_to attachment.file_identifier, attachment.file.url unless attachment.new_record?
       .panel-body
         = render partial: 'comments/list', locals: { comments_parent: @question }
+
+        .describe.pull-right
+          - if user_signed_in?
+            - if @question.notification_of(current_user)
+              = link_to 'unsubscribe', question_notification_path(@question, @question.notification_of(current_user)), class: 'btn btn-primary', remote: :true, method: :delete
+            - else
+              = button_to 'subscribe', question_notifications_path(@question), class: 'btn btn-primary', remote: :true
+
     .form{data: {url: edit_question_path(@question)}}

@@ -1,0 +1,1 @@
+$('.question.box').find('.describe').html("<%= j link_to 'unsubscribe', question_notification_path(@question, @notification), class: 'btn btn-primary', remote: :true, method: :delete %>")

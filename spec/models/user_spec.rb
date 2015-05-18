@@ -4,6 +4,7 @@ RSpec.describe User, type: :model do
   context 'associations' do
     it { is_expected.to have_many :answers}
     it { is_expected.to have_many :questions}
+    it { is_expected.to have_many(:notifications).dependent(:destroy) }
   end
 
   describe '#owns?' do
