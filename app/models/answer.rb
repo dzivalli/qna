@@ -26,8 +26,6 @@ class Answer < ActiveRecord::Base
   end
 
   def notification_to_described_users
-    question.notifications.each do |notifications|
-      UserMailer.answer_notification(self, notifications.user.email).deliver_later
-    end
+    NotifySubscribedUsersJob.perform_later(self)
   end
 end

@@ -33,16 +33,9 @@ RSpec.describe Answer, type: :model do
     let!(:user) { create :user }
     let!(:question) { create :question, user: user}
 
-    let!(:others) { create_list :user, 2 }
-    let!(:notification1) { create :notification, user: others[0], question: question }
-    let!(:notification2) { create :notification, user: others[1], question: question }
-
     it 'sends email to owner and subscribed users' do
       expect(UserMailer).to receive(:answer_notification).with(kind_of(Answer), user.email).and_call_original
-
-      others.each do |other|
-        expect(UserMailer).to receive(:answer_notification).with(kind_of(Answer), other.email).and_call_original
-      end
+      expect(NotifySubscribedUsersJob).to receive(:perform_later).with(kind_of(Answer))
 
       create :answer, question: question
     end
