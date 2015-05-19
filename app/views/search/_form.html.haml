@@ -1,0 +1,7 @@
+= form_tag search_index_path, class: 'navbar-form navbar-right', method: :get do
+  .form-group
+    = text_field_tag 'q', nil, class: 'form-control', placeholder: 'Search'
+  in
+  .form-group
+    = select_tag 'conditions', options_for_select(search_options), class: 'form-control'
+  = submit_tag 'Find', class: 'btn btn-default'
