@@ -39,7 +39,7 @@ namespace :private_pub do
     on roles(:app) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :bundle, "exec thin -C config/private_pub/thin_#{fetch(:stage)}.yml -d -P #{fetch(:private_pub_pid)} start"
+          execute :bundle, "exec thin -C config/private_pub.yml -d -P #{fetch(:private_pub_pid)} start"
         end
       end
     end
