@@ -1,7 +1,7 @@
 class Condition
   def self.from_params(params)
     @params = params
-    @h = {}
+    @condition_hash = {}
     @search_string = @params[:q] || ''
 
     return @search_string if check_for_search_everywhere?
@@ -13,7 +13,7 @@ class Condition
       conditions_from_array
     end
 
-    { conditions: @h }
+    { conditions: @condition_hash }
   end
 
 
@@ -24,7 +24,7 @@ class Condition
   end
 
   def self.conditions_from_string
-    @h = { @params[:conditions].to_sym => @search_string }
+    @condition_hash = { @params[:conditions].to_sym => @search_string }
   end
 
   def self.raw_search_string_for_questions
@@ -32,6 +32,6 @@ class Condition
   end
 
   def self.conditions_from_array
-    @params[:conditions].each { |value| @h[value.to_sym] = @search_string }
+    @params[:conditions].each { |value| @condition_hash[value.to_sym] = @search_string }
   end
 end
