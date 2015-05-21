@@ -1,6 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  cconfig.action_mailer.default_url_options = {:host => "dzivalli1.ddns.net"}
+  config.action_mailer.default_url_options = {:host => "dzivalli1.ddns.net"}
 
   # Code is not reloaded between requests.
   config.cache_classes = true
