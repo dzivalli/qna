@@ -16,6 +16,7 @@
 /config/database.yml
 /config/secrets.yml
 /public
+.env
 
 #sphinx
 /config/*.sphinx.conf
