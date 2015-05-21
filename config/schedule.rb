@@ -22,3 +22,7 @@
 every 1.day, at: '12pm' do
   runner 'DailyDigest.perform_later'
 end
+
+every 60.minutes do
+  rake "ts:index"
+end
