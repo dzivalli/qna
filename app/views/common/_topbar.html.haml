@@ -2,6 +2,7 @@
   = menu_group do
     = menu_item 'Home', root_path
     = menu_item 'Create question', new_question_path if current_user
+
   = menu_group pull: :right do
     - if current_user
       = menu_item '#' do
@@ -12,3 +13,5 @@
     - else
       = menu_item 'Sign in', new_user_session_path
       = menu_item 'Registration', new_user_registration_path
+
+  = render 'search/form'

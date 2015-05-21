@@ -16,3 +16,7 @@
 /config/database.yml
 /config/secrets.yml
 /public
+
+#sphinx
+/config/*.sphinx.conf
+/db/sphinx/
