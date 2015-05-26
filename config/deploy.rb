@@ -10,7 +10,7 @@ set :deploy_to, '/home/deployer/qna'
 
 
 # Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml', '.env', 'config/private_pub.yml', 'puma.rb')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml', '.env', 'config/private_pub.yml', 'config/private_pub_thin.yml',  'puma.rb')
 
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
@@ -26,6 +26,8 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+      invoke 'puma:restart'
+      invoke 'thinking_sphinx:restart'
     end
   end
 end
@@ -39,7 +41,7 @@ namespace :private_pub do
     on roles(:app) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :bundle, "exec thin -C config/private_pub.yml -d -P #{fetch(:private_pub_pid)} start"
+          execute :bundle, "exec thin -C config/private_pub_thin.yml -d -P #{fetch(:private_pub_pid)} start"
         end
       end
     end
