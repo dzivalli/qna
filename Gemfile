@@ -55,6 +55,7 @@ gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'puma'
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'redis-rails'
 
 group :development do
   gem 'capistrano', require: false
