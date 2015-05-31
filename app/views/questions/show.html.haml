@@ -1,9 +1,10 @@
-.question.box{data: {question_id: @question.id}}
-  = render 'question_form'
+- cache_unless user_signed_in?, @question do
+  .question.box{data: {question_id: @question.id}}
+    = render 'question_form'
 
-%h4 Answers:
-%ul.list-group.answers
-  = render @question.answers.includes(:attachments, :comments).best_first
+  %h4 Answers:
+  %ul.list-group.answers
+    = render @question.answers.includes(:attachments, :comments).best_first
 
 - if user_signed_in?
   %h4 Your answer:
